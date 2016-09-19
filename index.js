@@ -24,7 +24,7 @@ const ACEPTED_SVG_ELEMENTS = {'svg':true, 'g':true, 'circle':true, 'path':true,
                               'rect':true, 'linearGradient':true, 'radialGradient':true, 'stop':true};
 
 
-// Atributos que se mapean de forma directa al componente SVG
+// Attributes from SVG elements that are mapped directly.
 const SVG_ATTS = {'viewBox':true};
 const G_ATTS = {'id':true};
 const CIRCLE_ATTS = {'cx':true, 'cy':true, 'r':true};
@@ -34,7 +34,7 @@ const LINEARG_ATTS = {'id':true, 'x1':true, 'y1':true, 'x2':true, 'y2':true};
 const RADIALG_ATTS = {'id':true, 'cx':true, 'cy':true, 'r':true};
 const STOP_ATTS = {'offset':true};
 
-// Atributos que tienen una transformacion de formato.
+// Attributes that have a transformation of value
 const SVG_ATTS_TRANSFORM = {'x':true, 'y':true, 'height':true, 'width':true }; //'viewBox':true
 const G_ATTS_TRANSFORM = {};
 const CIRCLE_ATTS_TRANSFORM = {'style':true};
@@ -44,7 +44,7 @@ const LINEARG_ATTS_TRANSFORM = {};
 const RADIALG_ATTS_TRANSFORM = {}; // Its not working
 const STOP_ATTS_TRANSFORM = {'style':true};
 
-//
+// Attributes that only change his name
 const ATTS_TRANSFORMED_NAMES={'stroke-linejoin':'strokeLinejoin',
                               'stroke-linecap':'strokeLinecap',
                               'stroke-width':'strokeWidth',
@@ -176,9 +176,10 @@ class SvgUri extends Component{
       //Process the xml node
       let arrayElements = [];
 
+      // Only process accepted elements
       if(!(node.nodeName in ACEPTED_SVG_ELEMENTS))
           return null;
-      // Si tiene hijos procesa los hijos.
+      // if have children process them.
 
       // Recursive function.
       if (node.childNodes && node.childNodes.length > 0){
