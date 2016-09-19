@@ -14,6 +14,12 @@ Install library from `npm`
   npm install react-native-svg-uri --save
   ```
   
+Link library react-native-svg
+
+  ```bash
+  react-native link react-native-svg
+  ```   
+  
 ### <a name="Usage">Usage</a>
 
 Here's a simple example:
