@@ -12,7 +12,7 @@ Install library from `npm`
 Here's a simple example:
 
 ```javascript
-import SvgUri from 'react-native-vg-uri';
+import SvgUri from 'react-native-svg-uri';
 
 class TestSvgUri extends Component {
   render() {
@@ -27,5 +27,7 @@ class TestSvgUri extends Component {
 ```
 
 This will render:
+
+
 ![Component example](./screenshoots/sample.png)
 
