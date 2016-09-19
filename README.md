@@ -12,54 +12,20 @@ Install library from `npm`
 Here's a simple example:
 
 ```javascript
-import Svg,{
-    Circle,
-    Ellipse,
-    G,
-    LinearGradient,
-    RadialGradient,
-    Line,
-    Path,
-    Polygon,
-    Polyline,
-    Rect,
-    Symbol,
-    Text,
-    Use,
-    Defs,
-    Stop
-} from 'react-native-svg';
+import SvgUri from 'react-native-vg-uri';
 
-class SvgExample extends Component {
-    render() {
-        return (
-            <Svg
-                height="100"
-                width="100"
-            >
-                <Circle
-                    cx="50"
-                    cy="50"
-                    r="45"
-                    stroke="blue"
-                    strokeWidth="2.5"
-                    fill="green"
-                />
-                <Rect
-                    x="15"
-                    y="15"
-                    width="70"
-                    height="70"
-                    stroke="red"
-                    strokeWidth="2"
-                    fill="yellow"
-                />
-            </Svg>
-        );
-    }
+class TestSvgUri extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+         <SvgUri width="200" height="200"
+                 source={{uri:'http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg'}} > </SvgUri>
+      </View>
+    );
+  }
 }
 ```
 
 This will render:
-
+![Component example](./screenshoots/sample.png)
 
