@@ -52,6 +52,7 @@ const ATTS_TRANSFORMED_NAMES={'stroke-linejoin':'strokeLinejoin',
                             //  'stroke-miterlimit':'strokeMiterlimit',
                               };
 
+let ind = 0;
 
 class SvgUri extends Component{
 
@@ -65,10 +66,11 @@ class SvgUri extends Component{
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
     this.inspectNode          = this.inspectNode.bind(this);
     this.fecthSVGData         = this.fecthSVGData.bind(this);
-    // Gets the image data from an URL.
+
+    // Gets the image data from an URL or a static file
     if (props.source) {
-      const source = resolveAssetSource(props.source) || {};
-      this.fecthSVGData(source.uri);
+        const source = resolveAssetSource(props.source) || {};
+        this.fecthSVGData(source.uri);
     }
 	}
 
@@ -87,7 +89,7 @@ class SvgUri extends Component{
 
   createSVGElement(node, childs){
         let componentAtts = {};
-
+        let i = ind++;
         switch (node.nodeName) {
         case 'svg':
              componentAtts = this.obtainComponentAtts(node, SVG_ATTS, SVG_ATTS_TRANSFORM);
@@ -96,28 +98,28 @@ class SvgUri extends Component{
              if (this.props.height)
                 componentAtts.height = this.props.height;
 
-             return <Svg {...componentAtts}>{childs}</Svg>;
+             return <Svg key={i} {...componentAtts}>{childs}</Svg>;
         case 'g':
              componentAtts = this.obtainComponentAtts(node, G_ATTS, G_ATTS_TRANSFORM);
-            return <G {...componentAtts}>{childs}</G>;
+            return <G key={i} {...componentAtts}>{childs}</G>;
         case 'path':
              componentAtts = this.obtainComponentAtts(node, PATH_ATTS, PATH_ATTS_TRANSFORM);
-            return <Path {...componentAtts}>{childs}</Path>;
+            return <Path key={i} {...componentAtts}>{childs}</Path>;
         case 'circle':
              componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS, CIRCLE_ATTS_TRANSFORM);
-            return <Circle {...componentAtts}>{childs}</Circle>;
+            return <Circle key={i} {...componentAtts}>{childs}</Circle>;
         case 'rect':
              componentAtts = this.obtainComponentAtts(node, RECT_ATTS, RECT_ATTS_TRANSFORM);
-            return <Rect {...componentAtts}>{childs}</Rect>;
+            return <Rect key={i} {...componentAtts}>{childs}</Rect>;
         case 'linearGradient':
-             componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS, RADIALG_ATTS_TRANSFORM);
-            return <Defs><LinearGradient {...componentAtts}>{childs}</LinearGradient></Defs>;
+             componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS, LINEARG_ATTS_TRANSFORM);
+            return <Defs><LinearGradient key={i} {...componentAtts}>{childs}</LinearGradient></Defs>;
         case 'radialGradient':
              componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS, RADIALG_ATTS_TRANSFORM);
-            return <Defs><RadialGradient {...componentAtts}>{childs}</RadialGradient></Defs>;
+            return <Defs><RadialGradient key={i} {...componentAtts}>{childs}</RadialGradient></Defs>;
         case 'stop':
              componentAtts = this.obtainComponentAtts(node, STOP_ATTS, STOP_ATTS_TRANSFORM);
-            return <Stop {...componentAtts}>{childs}</Stop>;
+            return <Stop key={i} {...componentAtts}>{childs}</Stop>;
         default:
           return null;
           break;
