@@ -2,6 +2,7 @@
 import React, {Component, PropTypes} from "react";
 import {View} from 'react-native';
 import xmldom from 'xmldom'; // Dependencie
+import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import Svg,{
     Circle,
@@ -65,8 +66,10 @@ class SvgUri extends Component{
     this.inspectNode          = this.inspectNode.bind(this);
     this.fecthSVGData         = this.fecthSVGData.bind(this);
     // Gets the image data from an URL.
-    if (props.source && props.source.uri)
-      this.fecthSVGData(props.source.uri);
+    if (props.source) {
+      const source = resolveAssetSource(props.source) || {};
+      this.fecthSVGData(source.uri);
+    }
 	}
 
 
