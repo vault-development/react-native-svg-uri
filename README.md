@@ -39,6 +39,15 @@ class TestSvgUri extends Component {
 }
 ```
 
+or a static file
+
+```javascript
+ 
+         <SvgUri width="200" height="200"
+                 source={require('./images/homer.svg')} /> 
+     
+```
+
 This will render:
 
 
