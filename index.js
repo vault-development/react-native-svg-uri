@@ -59,7 +59,7 @@ class SvgUri extends Component{
 	constructor(props){
 		super(props);
 
-    this.state = {svgXmlData:null};
+    this.state = {svgXmlData: props.svgXmlData};
 
     this.createSVGElement     = this.createSVGElement.bind(this);
     this.transformSVGAtt      = this.transformSVGAtt.bind(this);
