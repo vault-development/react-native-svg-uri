@@ -146,6 +146,11 @@ class SvgUri extends Component{
               }
           }
       }
+      
+      if (this.props.fill) {
+        return Object.assign({}, componentAtts, { fill: this.props.fill });
+      }
+
       return componentAtts;
   }
 
