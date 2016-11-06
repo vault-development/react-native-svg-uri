@@ -28,9 +28,9 @@ const ACEPTED_SVG_ELEMENTS = {'svg':true, 'g':true, 'circle':true, 'path':true,
 // Attributes from SVG elements that are mapped directly.
 const SVG_ATTS = {'viewBox':true};
 const G_ATTS = {'id':true};
-const CIRCLE_ATTS = {'cx':true, 'cy':true, 'r':true, 'fill': true};
+const CIRCLE_ATTS = {'cx':true, 'cy':true, 'r':true, 'fill':true, 'stroke':true};
 const PATH_ATTS = {'d':true, 'fill':true, 'stroke':true};
-const RECT_ATTS = {'width':true, 'height':true};
+const RECT_ATTS = {'width':true, 'height':true, 'fill':true, 'stroke':true};
 const LINEARG_ATTS = {'id':true, 'x1':true, 'y1':true, 'x2':true, 'y2':true};
 const RADIALG_ATTS = {'id':true, 'cx':true, 'cy':true, 'r':true};
 const STOP_ATTS = {'offset':true};
