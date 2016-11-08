@@ -128,20 +128,15 @@ class SvgUri extends Component{
 
   obtainComponentAtts(node, ATTS_ENABLED, ATTS_TRANSFORM){
       let componentAtts = {};
-      for (let i = 0; i < node.attributes.length; i++){
+      for (let i = 0; i < node.attributes.length; i++) {
           let att = node.attributes[i];
-          if (att.nodeName in ATTS_TRANSFORM){
-              att = this.transformSVGAtt(node.nodeName, att.nodeName, att.nodeValue);
-              componentAtts = Object.assign({}, componentAtts, att);
-          }else{
-
-              if (att.nodeName in ATTS_TRANSFORMED_NAMES){
-                componentAtts[ATTS_TRANSFORMED_NAMES[att.nodeName]] = att.nodeValue;
-              }else{
-                  if (att.nodeName in ATTS_ENABLED){ // Valida que el atributo sea mapeable
-                      componentAtts[att.nodeName] = att.nodeValue;
-                  }
-              }
+          if (att.nodeName in ATTS_TRANSFORM) {
+            att = this.transformSVGAtt(node.nodeName, att.nodeName, att.nodeValue);
+            componentAtts = Object.assign({}, componentAtts, att);
+          } else if (att.nodeName in ATTS_TRANSFORMED_NAMES) {
+            componentAtts[ATTS_TRANSFORMED_NAMES[att.nodeName]] = att.nodeValue;
+          } else if (att.nodeName in ATTS_ENABLED) {
+            componentAtts[att.nodeName] = att.nodeValue;
           }
       }
 
