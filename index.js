@@ -219,4 +219,8 @@ class SvgUri extends Component{
 	}
 }
 
+SvgUri.propTypes = {
+  fill: PropTypes.string,
+}
+
 module.exports = SvgUri;
