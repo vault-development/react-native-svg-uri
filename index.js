@@ -140,8 +140,6 @@ class SvgUri extends Component{
               }else{
                   if (att.nodeName in ATTS_ENABLED){ // Valida que el atributo sea mapeable
                       componentAtts[att.nodeName] = att.nodeValue;
-                  }else{
-                      ;
                   }
               }
           }
