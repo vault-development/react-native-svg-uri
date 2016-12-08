@@ -66,7 +66,8 @@ class SvgUri extends Component{
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
     this.inspectNode          = this.inspectNode.bind(this);
     this.fecthSVGData         = this.fecthSVGData.bind(this);
-
+    let responseXML; 
+    let isComponentMounted = false;
     // Gets the image data from an URL or a static file
     if (props.source) {
         const source = resolveAssetSource(props.source) || {};
@@ -74,16 +75,24 @@ class SvgUri extends Component{
     }
 	}
 
-
+    componentWillMount() {
+      this.isComponentMounted = true;
+    }
+    componentWillUnmount() {
+      this.isComponentMounted = false
+    }
   async fecthSVGData(uri){
      try {
-         let response = await fetch(uri);
-         let responseXML = await response.text();
-         this.setState({svgXmlData:responseXML});
-         return responseXML;
+        let response = await fetch(uri);
+        let responseXML = await response.text();
+        this.responseXML = responseXML            
      } catch(error) {
-        console.error(error);
-     }
+	console.error(error);
+     } finally {
+	if (this.isComponentMounted) {
+	     this.setState({svgXmlData:this.responseXML});
+	}          
+    }
   }
 
 
