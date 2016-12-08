@@ -74,11 +74,15 @@ class SvgUri extends Component{
     }
 	}
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.source && this.props.source.uri && nextProps.source.uri != this.props.source.uri)
-        this.fecthSVGData(nextProps.source.uri);
-  }
-
+  componentWillReceiveProps (nextProps){
+    if (nextProps.source) {
+        const source = resolveAssetSource(nextProps.source) || {};
+        const oldSource = resolveAssetSource(this.props.source) || {};
+        if(source.uri !== oldSource.uri){
+            this.fecthSVGData(source.uri);
+        }
+    }
+  } 
 
   async fecthSVGData(uri){
      try {
