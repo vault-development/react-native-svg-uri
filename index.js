@@ -136,13 +136,12 @@ class SvgUri extends Component{
           } else if (att.nodeName in ATTS_TRANSFORMED_NAMES) {
             componentAtts[ATTS_TRANSFORMED_NAMES[att.nodeName]] = att.nodeValue;
           } else if (att.nodeName in ATTS_ENABLED) {
-            componentAtts[att.nodeName] = att.nodeValue;
+          		if (att.nodeName == 'fill' && this.props.fill)
+          			componentAtts[att.nodeName] = this.props.fill;
+          		else
+            		componentAtts[att.nodeName] = att.nodeValue;
           }
-      }
-
-      if (this.props.fill && 'fill' in ATTS_ENABLED) {
-        return Object.assign({}, componentAtts, { fill: this.props.fill });
-      }
+      } 
 
       return componentAtts;
   }
