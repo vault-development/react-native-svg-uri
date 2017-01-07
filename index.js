@@ -141,12 +141,7 @@ class SvgUri extends Component{
             validAttributes[ATTS_TRANSFORMED_NAMES[attribute]] = attributeValue;
           } 
           else if (attribute in ATTS_ENABLED) {
-            if (this.props.fill && attribute === 'fill') {
-                validAttributes[attribute] = this.props.fill;
-            }
-            else {
-                validAttributes[attribute] = attributeValue;
-            }
+            validAttributes[attribute] = this.props.fill && attribute === 'fill' ? this.props.fill : attributeValue;
           }
       }
 
