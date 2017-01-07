@@ -131,8 +131,8 @@ class SvgUri extends Component{
       for (let i = 0; i < node.attributes.length; i++) {
           let att = node.attributes[i];
           if (att.nodeName in ATTS_TRANSFORM) {
-            att = this.transformSVGAtt(node.nodeName, att.nodeName, att.nodeValue);
-            componentAtts = Object.assign({}, componentAtts, att);
+            const transformedAttribute = this.transformSVGAtt(node.nodeName, att.nodeName, att.nodeValue);
+            componentAtts = Object.assign({}, componentAtts, transformedAttribute);
           } else if (att.nodeName in ATTS_TRANSFORMED_NAMES) {
             componentAtts[ATTS_TRANSFORMED_NAMES[att.nodeName]] = att.nodeValue;
           } else if (att.nodeName in ATTS_ENABLED) {
