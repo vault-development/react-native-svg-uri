@@ -121,7 +121,6 @@ class SvgUri extends Component{
             return <Stop key={i} {...componentAtts}>{childs}</Stop>;
         default:
           return null;
-          break;
         }
   }
 
