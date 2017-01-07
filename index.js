@@ -128,6 +128,7 @@ class SvgUri extends Component{
 
   obtainComponentAtts(node, ATTS_ENABLED, ATTS_TRANSFORM) {
       let validAttributes = {};
+
       for (let i = 0; i < node.attributes.length; i++) {
           const attribute = node.attributes[i].nodeName;
           const attributeValue = node.attributes[i].nodeValue;
@@ -140,12 +141,13 @@ class SvgUri extends Component{
             validAttributes[ATTS_TRANSFORMED_NAMES[attribute]] = attributeValue;
           } 
           else if (attribute in ATTS_ENABLED) {
-            validAttributes[attribute] = attributeValue;
+            if (this.props.fill && attribute === 'fill') {
+                validAttributes[attribute] = this.props.fill;
+            }
+            else {
+                validAttributes[attribute] = attributeValue;
+            }
           }
-      }
-
-      if (this.props.fill && 'fill' in ATTS_ENABLED) {
-        return Object.assign({}, validAttributes, { fill: this.props.fill });
       }
 
       return validAttributes;
