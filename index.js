@@ -125,20 +125,20 @@ class SvgUri extends Component{
         }
   }
 
-  obtainComponentAtts(node, ATTS_ENABLED, ATTS_TRANSFORM) {
+  obtainComponentAtts(node, enabledAttributes, transformAttributes) {
       let validAttributes = {};
 
       for (let i = 0; i < node.attributes.length; i++) {
           const attribute = node.attributes[i].nodeName;
           const attributeValue = node.attributes[i].nodeValue;
           
-          if (attribute in ATTS_TRANSFORM) {
+          if (attribute in transformAttributes) {
             Object.assign(validAttributes, this.transformSVGAtt(attribute, attributeValue));
           } 
           else if (attribute in ATTS_TRANSFORMED_NAMES) {
             validAttributes[ATTS_TRANSFORMED_NAMES[attribute]] = attributeValue;
           } 
-          else if (attribute in ATTS_ENABLED) {
+          else if (attribute in enabledAttributes) {
             validAttributes[attribute] = this.props.fill && attribute === 'fill' ? this.props.fill : attributeValue;
           }
       }
