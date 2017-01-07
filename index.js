@@ -134,7 +134,7 @@ class SvgUri extends Component{
           const attributeValue = node.attributes[i].nodeValue;
           
           if (attribute in ATTS_TRANSFORM) {
-            const transformedAttribute = this.transformSVGAtt(node.nodeName, attribute, attributeValue);
+            const transformedAttribute = this.transformSVGAtt(attribute, attributeValue);
             validAttributes = Object.assign({}, validAttributes, transformedAttribute);
           } 
           else if (attribute in ATTS_TRANSFORMED_NAMES) {
@@ -148,7 +148,7 @@ class SvgUri extends Component{
       return validAttributes;
   }
 
-  transformSVGAtt(component, attName, attValue){
+  transformSVGAtt(attName, attValue){
       if (attName == 'style'){
           let styleAtts = attValue.split(';');
           let newAtts = {};
