@@ -62,7 +62,6 @@ class SvgUri extends Component{
     this.state = {svgXmlData:null};
 
     this.createSVGElement     = this.createSVGElement.bind(this);
-    this.transformSVGAtt      = this.transformSVGAtt.bind(this);
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
     this.inspectNode          = this.inspectNode.bind(this);
     this.fecthSVGData         = this.fecthSVGData.bind(this);
@@ -148,7 +147,7 @@ class SvgUri extends Component{
       return validAttributes;
   }
 
-  transformSVGAtt(attName, attValue){
+  transformSVGAtt(attName, attValue) {
       if (attName == 'style'){
           let styleAtts = attValue.split(';');
           let newAtts = {};
