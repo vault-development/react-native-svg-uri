@@ -126,7 +126,7 @@ class SvgUri extends Component{
         }
   }
 
-  obtainComponentAtts(node, ATTS_ENABLED, ATTS_TRANSFORM){
+  obtainComponentAtts(node, ATTS_ENABLED, ATTS_TRANSFORM) {
       let componentAtts = {};
       for (let i = 0; i < node.attributes.length; i++) {
           const attribute = node.attributes[i].nodeName;
