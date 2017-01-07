@@ -134,7 +134,7 @@ class SvgUri extends Component{
           
           if (attribute in ATTS_TRANSFORM) {
             const transformedAttribute = this.transformSVGAtt(attribute, attributeValue);
-            validAttributes = Object.assign({}, validAttributes, transformedAttribute);
+            Object.assign(validAttributes, transformedAttribute);
           } 
           else if (attribute in ATTS_TRANSFORMED_NAMES) {
             validAttributes[ATTS_TRANSFORMED_NAMES[attribute]] = attributeValue;
