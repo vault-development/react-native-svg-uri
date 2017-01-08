@@ -124,10 +124,10 @@ class SvgUri extends Component{
         }
   }
 
-  obtainComponentAtts(node, enabledAttributes, transformAttributes) {
+  obtainComponentAtts({attributes}, enabledAttributes, transformAttributes) {
       let validAttributes = {};
 
-      node.attributes.forEach(({nodeName, nodeValue}) => {
+      attributes.forEach(({nodeName, nodeValue}) => {
           if (nodeName in transformAttributes) {
             Object.assign(validAttributes, this.transformSVGAtt(nodeName, nodeValue));
           } 
