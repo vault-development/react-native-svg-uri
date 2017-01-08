@@ -127,9 +127,7 @@ class SvgUri extends Component{
   obtainComponentAtts(node, enabledAttributes, transformAttributes) {
       let validAttributes = {};
 
-      for (let i = 0; i < node.attributes.length; i++) {
-          const {nodeName, nodeValue} = node.attributes[i];
-          
+      node.attributes.forEach(({nodeName, nodeValue}) => {
           if (nodeName in transformAttributes) {
             Object.assign(validAttributes, this.transformSVGAtt(nodeName, nodeValue));
           } 
@@ -139,7 +137,7 @@ class SvgUri extends Component{
           else if (nodeName in enabledAttributes) {
             validAttributes[nodeName] = this.props.fill && nodeName === 'fill' ? this.props.fill : nodeValue;
           }
-      }
+      });
 
       return validAttributes;
   }
