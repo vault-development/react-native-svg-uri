@@ -20,7 +20,14 @@ Link library react-native-svg
   react-native link react-native-svg
   ```
 
-### <a name="Usage">Usage</a>
+## Props
+
+| Prop | Type | Default | Note |
+|---|---|---|---|
+| `source` | `ImageSource` |  | Same kind of `source` prop that `<Image />` component has
+| `fill` | `string` |  | Overrides all fill attributes of the svg file
+
+## <a name="Usage">Usage</a>
 
 Here's a simple example:
 
