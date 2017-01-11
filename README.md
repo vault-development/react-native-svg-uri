@@ -27,16 +27,15 @@ Here's a simple example:
 ```javascript
 import SvgUri from 'react-native-svg-uri';
 
-class TestSvgUri extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-         <SvgUri width="200" height="200"
-                 source={{uri:'http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg'}} />
-      </View>
-    );
-  }
-}
+const TestSvgUri = () => (
+  <View style={styles.container}>
+    <SvgUri
+      width="200"
+      height="200"
+      source={{uri:'http://thenewcode.com/assets/images/thumbnails/homer-simpson.svg'}}
+    />
+  </View>
+);
 ```
 
 or a static file
@@ -49,4 +48,3 @@ This will render:
 
 
 ![Component example](./screenshoots/sample.png)
-
