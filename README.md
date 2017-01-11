@@ -25,7 +25,7 @@ Link library react-native-svg
 | Prop | Type | Default | Note |
 |---|---|---|---|
 | `source` | `ImageSource` |  | Same kind of `source` prop that `<Image />` component has
-| `fill` | `string` |  | Overrides all fill attributes of the svg file
+| `fill` | `Color` |  | Overrides all fill attributes of the svg file
 
 ## <a name="Usage">Usage</a>
 
