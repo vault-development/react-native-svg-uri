@@ -17,7 +17,4 @@ export function transformSVGAtt(attName, attValue) {
   if (attName === 'x' || attName === 'y' || attName === 'height' || attName === 'width') {
     return {[attName]: attValue.replace('px', '')};
   }
-  if (attName === 'viewBox') {
-    return {viewbox: attValue};
-  }
 }

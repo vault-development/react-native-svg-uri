@@ -16,8 +16,4 @@ describe('transformSVGAtt', () => {
     expect(transformSVGAtt('height', '65px')).to.deep.equal({height: '65'});
     expect(transformSVGAtt('width', '999px')).to.deep.equal({width: '999'});
   });
-
-  it('transforms viewBox attribute', () => {
-    expect(transformSVGAtt('viewBox', '0 0 100 100')).to.deep.equal({viewbox: '0 0 100 100'});
-  });
 });
