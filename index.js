@@ -81,7 +81,7 @@ class SvgUri extends Component{
             this.fecthSVGData(source.uri);
         }
     }
-  } 
+  }
 
   async fecthSVGData(uri){
      try {
@@ -156,13 +156,13 @@ class SvgUri extends Component{
           let styleAtts = attValue.split(';');
           let newAtts = {};
           for (let i = 0; i < styleAtts.length; i++){
-              let styleAtt = styleAtts[i].split(':');
-              if (!styleAtt[1] || styleAtt[1] == '')
+              const [property, value] = styleAtts[i].split(':');
+              if (!value || value == '')
                   continue;
-              if (styleAtt[0] == 'stop-color')
-                  newAtts['stopColor'] = styleAtt[1];
+              if (property == 'stop-color')
+                  newAtts['stopColor'] = value;
               else
-                  newAtts[styleAtt[0]] = styleAtt[1];
+                  newAtts[property] = value;
           }
           return newAtts;
       }
