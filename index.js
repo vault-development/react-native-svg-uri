@@ -168,14 +168,10 @@ class SvgUri extends Component{
       }
 
       if (attName == 'x' || attName == 'y' || attName == 'height' || attName == 'width') {
-          let newAtts = {};
-          newAtts[attName] = attValue.replace('px', ''); // Remove the px
-          return newAtts;
+        return {[attName]: attValue.replace('px', '')};
       }
       if (attName == 'viewBox') {
-        let newAtts = {};
-        newAtts['viewbox'] = attValue; // El atributo va en minuscula
-        return newAtts;
+        return {viewbox: attValue};
       }
   }
 
