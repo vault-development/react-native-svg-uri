@@ -9,7 +9,5 @@ export function transformSVGAtt(attName, attValue) {
       }, {});
   }
 
-  if (attName === 'x' || attName === 'y' || attName === 'height' || attName === 'width') {
-    return {[attName]: attValue.replace('px', '')};
-  }
+  return {[attName]: attValue.replace('px', '')};
 }
