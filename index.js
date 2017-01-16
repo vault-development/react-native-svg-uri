@@ -157,12 +157,12 @@ class SvgUri extends Component{
           let newAtts = {};
           for (let i = 0; i < styleAtts.length; i++){
               const [property, value] = styleAtts[i].split(':');
-              if (!value)
-                  continue;
-              if (property == 'stop-color')
-                  newAtts['stopColor'] = value;
-              else
-                  newAtts[property] = value;
+              if (property === 'stop-color') {
+                newAtts['stopColor'] = value;
+              }
+              else if (value) {
+                newAtts[property] = value;
+              }
           }
           return newAtts;
       }
