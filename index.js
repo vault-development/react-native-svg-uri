@@ -23,29 +23,37 @@ import Svg,{
 
 import * as utils from './utils';
 
-const ACEPTED_SVG_ELEMENTS = {'svg':true, 'g':true, 'circle':true, 'path':true,
-                              'rect':true, 'linearGradient':true, 'radialGradient':true, 'stop':true};
+const ACEPTED_SVG_ELEMENTS = [
+  'svg',
+  'g',
+  'circle',
+  'path',
+  'rect',
+  'linearGradient',
+  'radialGradient',
+  'stop',
+];
 
 
 // Attributes from SVG elements that are mapped directly.
-const SVG_ATTS = {'viewBox':true};
-const G_ATTS = {'id':true};
-const CIRCLE_ATTS = {'cx':true, 'cy':true, 'r':true, 'fill':true, 'stroke':true};
-const PATH_ATTS = {'d':true, 'fill':true, 'stroke':true};
-const RECT_ATTS = {'width':true, 'height':true, 'fill':true, 'stroke':true};
-const LINEARG_ATTS = {'id':true, 'x1':true, 'y1':true, 'x2':true, 'y2':true};
-const RADIALG_ATTS = {'id':true, 'cx':true, 'cy':true, 'r':true};
-const STOP_ATTS = {'offset':true};
+const SVG_ATTS = ['viewBox'];
+const G_ATTS = ['id'];
+const CIRCLE_ATTS = ['cx', 'cy', 'r', 'fill', 'stroke'];
+const PATH_ATTS = ['d', 'fill', 'stroke'];
+const RECT_ATTS = ['width', 'height', 'fill', 'stroke'];
+const LINEARG_ATTS = ['id', 'x1', 'y1', 'x2', 'y2'];
+const RADIALG_ATTS = ['id', 'cx', 'cy', 'r'];
+const STOP_ATTS = ['offset'];
 
 // Attributes that have a transformation of value
-const SVG_ATTS_TRANSFORM = {'x':true, 'y':true, 'height':true, 'width':true }; //'viewBox':true
-const G_ATTS_TRANSFORM = {};
-const CIRCLE_ATTS_TRANSFORM = {'style':true};
-const PATH_ATTS_TRANSFORM = {'style':true};
-const RECT_ATTS_TRANSFORM = {'style':true};
-const LINEARG_ATTS_TRANSFORM = {};
-const RADIALG_ATTS_TRANSFORM = {}; // Its not working
-const STOP_ATTS_TRANSFORM = {'style':true};
+const SVG_ATTS_TRANSFORM = ['x', 'y', 'height', 'width'];
+const G_ATTS_TRANSFORM = [];
+const CIRCLE_ATTS_TRANSFORM = ['style'];
+const PATH_ATTS_TRANSFORM = ['style'];
+const RECT_ATTS_TRANSFORM = ['style'];
+const LINEARG_ATTS_TRANSFORM = [];
+const RADIALG_ATTS_TRANSFORM = [];
+const STOP_ATTS_TRANSFORM = ['style'];
 
 // Attributes that only change his name
 const ATTS_TRANSFORMED_NAMES={'stroke-linejoin':'strokeLinejoin',
@@ -139,13 +147,13 @@ class SvgUri extends Component{
       let validAttributes = {};
 
       Array.from(attributes).forEach(({nodeName, nodeValue}) => {
-          if (nodeName in transformAttributes) {
+          if (transformAttributes.includes(nodeName)) {
             Object.assign(validAttributes, utils.transformSVGAtt(nodeName, nodeValue));
           }
           else if (nodeName in ATTS_TRANSFORMED_NAMES) {
             validAttributes[ATTS_TRANSFORMED_NAMES[nodeName]] = nodeValue;
           }
-          else if (nodeName in enabledAttributes) {
+          else if (enabledAttributes.includes(nodeName)) {
             validAttributes[nodeName] = this.props.fill && nodeName === 'fill' ? this.props.fill : nodeValue;
           }
       });
@@ -158,7 +166,7 @@ class SvgUri extends Component{
       let arrayElements = [];
 
       // Only process accepted elements
-      if(!(node.nodeName in ACEPTED_SVG_ELEMENTS))
+      if (!ACEPTED_SVG_ELEMENTS.includes(node.nodeName))
           return null;
       // if have children process them.
 
