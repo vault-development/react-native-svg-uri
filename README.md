@@ -53,5 +53,8 @@ or a static file
 
 This will render:
 
-
 ![Component example](./screenshoots/sample.png)
+
+## Testing
+1. Make sure you have installed dependencies with `npm i`
+2. Run tests with `npm test`
