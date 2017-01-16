@@ -62,7 +62,6 @@ class SvgUri extends Component{
     this.state = {svgXmlData: props.svgXmlData};
 
     this.createSVGElement     = this.createSVGElement.bind(this);
-    this.transformSVGAtt      = this.transformSVGAtt.bind(this);
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
     this.inspectNode          = this.inspectNode.bind(this);
     this.fecthSVGData         = this.fecthSVGData.bind(this);
@@ -131,34 +130,28 @@ class SvgUri extends Component{
             return <Stop key={i} {...componentAtts}>{childs}</Stop>;
         default:
           return null;
-          break;
         }
   }
 
-  obtainComponentAtts(node, ATTS_ENABLED, ATTS_TRANSFORM){
-      let componentAtts = {};
-      for (let i = 0; i < node.attributes.length; i++){
-          let att = node.attributes[i];
-          if (att.nodeName in ATTS_TRANSFORM){
-              att = this.transformSVGAtt(node.nodeName, att.nodeName, att.nodeValue);
-              componentAtts = Object.assign({}, componentAtts, att);
-          }else{
+  obtainComponentAtts({attributes}, enabledAttributes, transformAttributes) {
+      let validAttributes = {};
 
-              if (att.nodeName in ATTS_TRANSFORMED_NAMES){
-                componentAtts[ATTS_TRANSFORMED_NAMES[att.nodeName]] = att.nodeValue;
-              }else{
-                  if (att.nodeName in ATTS_ENABLED){ // Valida que el atributo sea mapeable
-                      componentAtts[att.nodeName] = att.nodeValue;
-                  }else{
-                      ;
-                  }
-              }
+      Array.from(attributes).forEach(({nodeName, nodeValue}) => {
+          if (nodeName in transformAttributes) {
+            Object.assign(validAttributes, this.transformSVGAtt(nodeName, nodeValue));
           }
-      }
-      return componentAtts;
+          else if (nodeName in ATTS_TRANSFORMED_NAMES) {
+            validAttributes[ATTS_TRANSFORMED_NAMES[nodeName]] = nodeValue;
+          }
+          else if (nodeName in enabledAttributes) {
+            validAttributes[nodeName] = this.props.fill && nodeName === 'fill' ? this.props.fill : nodeValue;
+          }
+      });
+
+      return validAttributes;
   }
 
-  transformSVGAtt(component, attName, attValue){
+  transformSVGAtt(attName, attValue) {
       if (attName == 'style'){
           let styleAtts = attValue.split(';');
           let newAtts = {};
@@ -228,6 +221,10 @@ class SvgUri extends Component{
       return null;
     }
 	}
+}
+
+SvgUri.propTypes = {
+  fill: PropTypes.string,
 }
 
 module.exports = SvgUri;
