@@ -21,6 +21,8 @@ import Svg,{
     Stop
 } from 'react-native-svg';
 
+import * as utils from './utils';
+
 const ACEPTED_SVG_ELEMENTS = {'svg':true, 'g':true, 'circle':true, 'path':true,
                               'rect':true, 'linearGradient':true, 'radialGradient':true, 'stop':true};
 
@@ -138,7 +140,7 @@ class SvgUri extends Component{
 
       Array.from(attributes).forEach(({nodeName, nodeValue}) => {
           if (nodeName in transformAttributes) {
-            Object.assign(validAttributes, this.transformSVGAtt(nodeName, nodeValue));
+            Object.assign(validAttributes, utils.transformSVGAtt(nodeName, nodeValue));
           }
           else if (nodeName in ATTS_TRANSFORMED_NAMES) {
             validAttributes[ATTS_TRANSFORMED_NAMES[nodeName]] = nodeValue;
@@ -149,30 +151,6 @@ class SvgUri extends Component{
       });
 
       return validAttributes;
-  }
-
-  transformSVGAtt(attName, attValue) {
-      if (attName === 'style') {
-          let styleAtts = attValue.split(';');
-          let newAtts = {};
-          for (let i = 0; i < styleAtts.length; i++) {
-              const [property, value] = styleAtts[i].split(':');
-              if (property === 'stop-color') {
-                newAtts['stopColor'] = value;
-              }
-              else if (value) {
-                newAtts[property] = value;
-              }
-          }
-          return newAtts;
-      }
-
-      if (attName === 'x' || attName === 'y' || attName === 'height' || attName === 'width') {
-        return {[attName]: attValue.replace('px', '')};
-      }
-      if (attName === 'viewBox') {
-        return {viewbox: attValue};
-      }
   }
 
   inspectNode(node){
