@@ -152,7 +152,7 @@ class SvgUri extends Component{
   }
 
   transformSVGAtt(attName, attValue) {
-      if (attName == 'style') {
+      if (attName === 'style') {
           let styleAtts = attValue.split(';');
           let newAtts = {};
           for (let i = 0; i < styleAtts.length; i++) {
@@ -167,10 +167,10 @@ class SvgUri extends Component{
           return newAtts;
       }
 
-      if (attName == 'x' || attName == 'y' || attName == 'height' || attName == 'width') {
+      if (attName === 'x' || attName === 'y' || attName === 'height' || attName === 'width') {
         return {[attName]: attValue.replace('px', '')};
       }
-      if (attName == 'viewBox') {
+      if (attName === 'viewBox') {
         return {viewbox: attValue};
       }
   }
