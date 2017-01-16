@@ -65,6 +65,7 @@ class SvgUri extends Component{
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
     this.inspectNode          = this.inspectNode.bind(this);
     this.fecthSVGData         = this.fecthSVGData.bind(this);
+    this.updateSVGData         = this.updateSVGData.bind(this);
 
     // Gets the image data from an URL or a static file
     if (props.source) {
@@ -94,6 +95,9 @@ class SvgUri extends Component{
      }
   }
 
+  updateSVGData(svgXmlData) {
+     this.setState({svgXmlData:svgXmlData});
+  }
 
   createSVGElement(node, childs){
         let componentAtts = {};
