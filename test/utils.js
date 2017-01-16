@@ -1,12 +1,18 @@
 import {expect} from 'chai';
 
-import {transformSVGAtt} from '../utils';
+import {transformSVGAtt, camelCase} from '../utils';
 
 describe('transformSVGAtt', () => {
   it('transforms style attribute', () => {
     expect(transformSVGAtt('style', 'fill:rgb(0,0,255);stroke:rgb(0,0,0)')).to.deep.equal({
       fill: 'rgb(0,0,255)',
       stroke: 'rgb(0,0,0)',
+    });
+  });
+
+  it('transforms style attribute with dash-case attribute', () => {
+    expect(transformSVGAtt('style', 'stop-color:#ffffff')).to.deep.equal({
+      stopColor: '#ffffff',
     });
   });
 

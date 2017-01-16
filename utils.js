@@ -2,18 +2,11 @@ export const camelCase = value => value.replace(/-([a-z])/g, g => g[1].toUpperCa
 
 export function transformSVGAtt(attName, attValue) {
   if (attName === 'style') {
-    let styleAtts = attValue.split(';');
-    let newAtts = {};
-    for (let i = 0; i < styleAtts.length; i++) {
-      const [property, value] = styleAtts[i].split(':');
-      if (property === 'stop-color') {
-        newAtts.stopColor = value;
-      }
-      else if (value) {
-        newAtts[property] = value;
-      }
-    }
-    return newAtts;
+    return attValue.split(';')
+      .reduce((acc, attribute) => {
+        const [property, value] = attribute.split(':');
+        return {...acc, [camelCase(property)]: value};
+      }, {});
   }
 
   if (attName === 'x' || attName === 'y' || attName === 'height' || attName === 'width') {
