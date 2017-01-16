@@ -152,10 +152,10 @@ class SvgUri extends Component{
   }
 
   transformSVGAtt(attName, attValue) {
-      if (attName == 'style'){
+      if (attName == 'style') {
           let styleAtts = attValue.split(';');
           let newAtts = {};
-          for (let i = 0; i < styleAtts.length; i++){
+          for (let i = 0; i < styleAtts.length; i++) {
               const [property, value] = styleAtts[i].split(':');
               if (property === 'stop-color') {
                 newAtts['stopColor'] = value;
