@@ -1,3 +1,5 @@
+export const camelCase = value => value.replace(/-([a-z])/g, g => g[1].toUpperCase());
+
 export function transformSVGAtt(attName, attValue) {
   if (attName === 'style') {
     let styleAtts = attValue.split(';');

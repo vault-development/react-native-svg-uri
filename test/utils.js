@@ -17,3 +17,13 @@ describe('transformSVGAtt', () => {
     expect(transformSVGAtt('width', '999px')).to.deep.equal({width: '999'});
   });
 });
+
+describe('camelCase', () => {
+  it('transforms two word attribute with dash', () => {
+    expect(camelCase('stop-color')).to.deep.equal('stopColor');
+  });
+
+  it('does not do anything to string that is already camel cased', () => {
+    expect(camelCase('stopColor')).to.deep.equal('stopColor');
+  });
+});
