@@ -1,28 +1,34 @@
 import {expect} from 'chai';
 
-import {transformSVGAtt, camelCase} from '../utils';
+import {transformStyle, camelCase, removePixelsFromNodeValue, getEnabledAttributes} from '../utils';
 
-describe('transformSVGAtt', () => {
+describe('transformStyle', () => {
   it('transforms style attribute', () => {
-    expect(transformSVGAtt('style', 'fill:rgb(0,0,255);stroke:rgb(0,0,0)')).to.deep.equal({
+    expect(
+      transformStyle({nodeName: 'style', nodeValue: 'fill:rgb(0,0,255);stroke:rgb(0,0,0)'})
+    ).to.deep.equal({
       fill: 'rgb(0,0,255)',
       stroke: 'rgb(0,0,0)',
     });
   });
 
   it('transforms style attribute with dash-case attribute', () => {
-    expect(transformSVGAtt('style', 'stop-color:#ffffff')).to.deep.equal({
+    expect(
+      transformStyle({nodeName: 'style', nodeValue: 'stop-color:#ffffff'})
+    ).to.deep.equal({
       stopColor: '#ffffff',
     });
   });
-
-  it('removes pixels from x, y, height and width attributes', () => {
-    expect(transformSVGAtt('x', '2px')).to.deep.equal({x: '2'});
-    expect(transformSVGAtt('y', '4px')).to.deep.equal({y: '4'});
-    expect(transformSVGAtt('height', '65px')).to.deep.equal({height: '65'});
-    expect(transformSVGAtt('width', '999px')).to.deep.equal({width: '999'});
-  });
 });
+
+describe('removePixelsFromNodeValue', () => {
+  it('removes pixels from x, y, height and width attributes', () => {
+    expect(removePixelsFromNodeValue({nodeName: 'x', nodeValue: '2px'})).to.deep.equal({nodeName: 'x', nodeValue: '2'});
+    expect(removePixelsFromNodeValue({nodeName: 'y', nodeValue: '4px'})).to.deep.equal({nodeName: 'y', nodeValue: '4'});
+    expect(removePixelsFromNodeValue({nodeName: 'height', nodeValue: '65px'})).to.deep.equal({nodeName: 'height', nodeValue: '65'});
+    expect(removePixelsFromNodeValue({nodeName: 'width', nodeValue: '999px'})).to.deep.equal({nodeName: 'width', nodeValue: '999'});
+  });
+})
 
 describe('camelCase', () => {
   it('transforms two word attribute with dash', () => {
@@ -31,5 +37,21 @@ describe('camelCase', () => {
 
   it('does not do anything to string that is already camel cased', () => {
     expect(camelCase('stopColor')).to.deep.equal('stopColor');
+  });
+});
+
+describe('getEnabledAttributes', () => {
+  it('return true when nodeName is found', () => {
+    const enabledAttributes = ['x', 'y'];
+    const hasEnabledAttribute = getEnabledAttributes(enabledAttributes);
+
+    expect(hasEnabledAttribute({nodeName: 'x'})).to.deep.equal(true);
+  });
+
+  it('return false when nodeName is not found', () => {
+    const enabledAttributes = ['width', 'height'];
+    const hasEnabledAttribute = getEnabledAttributes(enabledAttributes);
+
+    expect(hasEnabledAttribute({nodeName: 'depth'})).to.deep.equal(false);
   });
 });
