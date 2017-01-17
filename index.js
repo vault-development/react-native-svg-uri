@@ -32,6 +32,7 @@ const ACEPTED_SVG_ELEMENTS = [
   'linearGradient',
   'radialGradient',
   'stop',
+  'ellipse',
 ];
 
 // Attributes from SVG elements that are mapped directly.
@@ -43,6 +44,7 @@ const RECT_ATTS = ['width', 'height', 'fill', 'stroke'];
 const LINEARG_ATTS = ['id', 'x1', 'y1', 'x2', 'y2'];
 const RADIALG_ATTS = ['id', 'cx', 'cy', 'r'];
 const STOP_ATTS = ['offset'];
+const ELLIPSE_ATTS = ['fill', 'cx', 'cy', 'rx', 'ry'];
 
 let ind = 0;
 
@@ -120,6 +122,9 @@ class SvgUri extends Component{
         case 'stop':
              componentAtts = this.obtainComponentAtts(node, STOP_ATTS);
             return <Stop key={i} {...componentAtts}>{childs}</Stop>;
+        case 'ellipse':
+             componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS);
+            return <Ellipse key={i} {...componentAtts}>{childs}</Ellipse>;
         default:
           return null;
         }
