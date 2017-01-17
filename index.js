@@ -34,7 +34,6 @@ const ACEPTED_SVG_ELEMENTS = [
   'stop',
 ];
 
-
 // Attributes from SVG elements that are mapped directly.
 const SVG_ATTS = ['viewBox'];
 const G_ATTS = ['id'];
@@ -44,23 +43,6 @@ const RECT_ATTS = ['width', 'height', 'fill', 'stroke'];
 const LINEARG_ATTS = ['id', 'x1', 'y1', 'x2', 'y2'];
 const RADIALG_ATTS = ['id', 'cx', 'cy', 'r'];
 const STOP_ATTS = ['offset'];
-
-// Attributes that have a transformation of value
-const SVG_ATTS_TRANSFORM = ['x', 'y', 'height', 'width'];
-const G_ATTS_TRANSFORM = [];
-const CIRCLE_ATTS_TRANSFORM = ['style'];
-const PATH_ATTS_TRANSFORM = ['style'];
-const RECT_ATTS_TRANSFORM = ['style'];
-const LINEARG_ATTS_TRANSFORM = [];
-const RADIALG_ATTS_TRANSFORM = [];
-const STOP_ATTS_TRANSFORM = ['style'];
-
-// Attributes that only change his name
-const ATTS_TRANSFORMED_NAMES={'stroke-linejoin':'strokeLinejoin',
-                              'stroke-linecap':'strokeLinecap',
-                              'stroke-width':'strokeWidth',
-                            //  'stroke-miterlimit':'strokeMiterlimit',
-                              };
 
 let ind = 0;
 
@@ -110,7 +92,7 @@ class SvgUri extends Component{
         let i = ind++;
         switch (node.nodeName) {
         case 'svg':
-             componentAtts = this.obtainComponentAtts(node, SVG_ATTS, SVG_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, SVG_ATTS);
              if (this.props.width)
                 componentAtts.width = this.props.width;
              if (this.props.height)
@@ -118,47 +100,41 @@ class SvgUri extends Component{
 
              return <Svg key={i} {...componentAtts}>{childs}</Svg>;
         case 'g':
-             componentAtts = this.obtainComponentAtts(node, G_ATTS, G_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, G_ATTS);
             return <G key={i} {...componentAtts}>{childs}</G>;
         case 'path':
-             componentAtts = this.obtainComponentAtts(node, PATH_ATTS, PATH_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
             return <Path key={i} {...componentAtts}>{childs}</Path>;
         case 'circle':
-             componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS, CIRCLE_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
             return <Circle key={i} {...componentAtts}>{childs}</Circle>;
         case 'rect':
-             componentAtts = this.obtainComponentAtts(node, RECT_ATTS, RECT_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, RECT_ATTS);
             return <Rect key={i} {...componentAtts}>{childs}</Rect>;
         case 'linearGradient':
-             componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS, LINEARG_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS);
             return <Defs><LinearGradient key={i} {...componentAtts}>{childs}</LinearGradient></Defs>;
         case 'radialGradient':
-             componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS, RADIALG_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS);
             return <Defs><RadialGradient key={i} {...componentAtts}>{childs}</RadialGradient></Defs>;
         case 'stop':
-             componentAtts = this.obtainComponentAtts(node, STOP_ATTS, STOP_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, STOP_ATTS);
             return <Stop key={i} {...componentAtts}>{childs}</Stop>;
         default:
           return null;
         }
   }
 
-  obtainComponentAtts({attributes}, enabledAttributes, transformAttributes) {
-      let validAttributes = {};
-
-      Array.from(attributes).forEach(({nodeName, nodeValue}) => {
-          if (transformAttributes.includes(nodeName)) {
-            Object.assign(validAttributes, utils.transformSVGAtt(nodeName, nodeValue));
-          }
-          else if (nodeName in ATTS_TRANSFORMED_NAMES) {
-            validAttributes[ATTS_TRANSFORMED_NAMES[nodeName]] = nodeValue;
-          }
-          else if (enabledAttributes.includes(nodeName)) {
-            validAttributes[nodeName] = this.props.fill && nodeName === 'fill' ? this.props.fill : nodeValue;
-          }
-      });
-
-      return validAttributes;
+  obtainComponentAtts({attributes}, enabledAttributes) {
+    return Array.from(attributes)
+      .map(utils.camelCaseNodeName)
+      .map(utils.removePixelsFromNodeValue)
+      .map(utils.transformStyle)
+      .filter(utils.getEnabledAttributes(enabledAttributes))
+      .reduce((acc, {nodeName, nodeValue}) => ({
+        ...acc,
+        [nodeName]: this.props.fill && nodeName === 'fill' ? this.props.fill : nodeValue,
+      }), {});
   }
 
   inspectNode(node){
