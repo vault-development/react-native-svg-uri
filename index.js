@@ -115,10 +115,10 @@ class SvgUri extends Component{
             return <Rect key={i} {...componentAtts}>{childs}</Rect>;
         case 'linearGradient':
              componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS);
-            return <Defs><LinearGradient key={i} {...componentAtts}>{childs}</LinearGradient></Defs>;
+            return <Defs key={i}><LinearGradient {...componentAtts}>{childs}</LinearGradient></Defs>;
         case 'radialGradient':
              componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS);
-            return <Defs><RadialGradient key={i} {...componentAtts}>{childs}</RadialGradient></Defs>;
+            return <Defs key={i}><RadialGradient {...componentAtts}>{childs}</RadialGradient></Defs>;
         case 'stop':
              componentAtts = this.obtainComponentAtts(node, STOP_ATTS);
             return <Stop key={i} {...componentAtts}>{childs}</Stop>;
