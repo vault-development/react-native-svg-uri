@@ -10,15 +10,15 @@ order to contemplate all the cases
 
 Install library from `npm`
 
-  ```bash
-  npm install react-native-svg-uri --save
-  ```
+```bash
+npm install react-native-svg-uri --save
+```
 
 Link library react-native-svg
 
-  ```bash
-  react-native link react-native-svg # not react-native-svg-uri !!!
-  ```
+```bash
+react-native link react-native-svg # not react-native-svg-uri !!!
+```
 
 ## Props
 
@@ -53,5 +53,8 @@ or a static file
 
 This will render:
 
-
 ![Component example](./screenshoots/sample.png)
+
+## Testing
+1. Make sure you have installed dependencies with `npm i`
+2. Run tests with `npm test`
