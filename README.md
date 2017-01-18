@@ -32,7 +32,7 @@ react-native link react-native-svg # not react-native-svg-uri !!!
 
 - [ANDROID] There is a problem with static SVG file on Android,
   Works OK in debug mode but fails to load the file in release mode.
-  At the momment the only workarround is to pass the svg content in the svgXmlData prop.
+  At the moment the only workaround is to pass the svg content in the svgXmlData prop.
 
 ## <a name="Usage">Usage</a>
 
