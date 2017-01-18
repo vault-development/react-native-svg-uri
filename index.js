@@ -41,7 +41,7 @@ const SVG_ATTS = ['viewBox'];
 const G_ATTS = ['id'];
 const CIRCLE_ATTS = ['cx', 'cy', 'r', 'fill', 'stroke'];
 const PATH_ATTS = ['d', 'fill', 'stroke'];
-const RECT_ATTS = ['width', 'height', 'fill', 'stroke'];
+const RECT_ATTS = ['width', 'height', 'fill', 'stroke', 'x', 'y'];
 const LINEARG_ATTS = ['id', 'x1', 'y1', 'x2', 'y2'];
 const RADIALG_ATTS = ['id', 'cx', 'cy', 'r'];
 const STOP_ATTS = ['offset'];
@@ -150,15 +150,22 @@ class SvgUri extends Component{
   }
 
   obtainComponentAtts({attributes}, enabledAttributes) {
-    return Array.from(attributes)
+    let styleAtts = {};
+    Array.from(attributes).forEach(({nodeName, nodeValue}) => {
+                Object.assign(styleAtts, utils.transformStyle(nodeName, nodeValue, this.props.fill));
+    });
+
+    let componentAtts =  Array.from(attributes)
       .map(utils.camelCaseNodeName)
       .map(utils.removePixelsFromNodeValue)
-      .map(utils.transformStyle)
       .filter(utils.getEnabledAttributes(enabledAttributes))
       .reduce((acc, {nodeName, nodeValue}) => ({
         ...acc,
         [nodeName]: this.props.fill && nodeName === 'fill' ? this.props.fill : nodeValue,
       }), {});
+    Object.assign(componentAtts, styleAtts);
+
+    return componentAtts;
   }
 
   inspectNode(node){
