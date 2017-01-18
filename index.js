@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component, PropTypes} from "react";
 import {View} from 'react-native';
-import xmldom from 'xmldom'; // Dependencie
+import xmldom from 'xmldom';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import Svg,{
@@ -33,6 +33,7 @@ const ACEPTED_SVG_ELEMENTS = [
   'radialGradient',
   'stop',
   'ellipse',
+  'polygon'
 ];
 
 // Attributes from SVG elements that are mapped directly.
@@ -45,6 +46,7 @@ const LINEARG_ATTS = ['id', 'x1', 'y1', 'x2', 'y2'];
 const RADIALG_ATTS = ['id', 'cx', 'cy', 'r'];
 const STOP_ATTS = ['offset'];
 const ELLIPSE_ATTS = ['fill', 'cx', 'cy', 'rx', 'ry'];
+const POLYGON_ATTS = ['points'];
 
 let ind = 0;
 
@@ -125,6 +127,9 @@ class SvgUri extends Component{
         case 'ellipse':
              componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS);
             return <Ellipse key={i} {...componentAtts}>{childs}</Ellipse>;
+        case 'polygon':
+             componentAtts = this.obtainComponentAtts(node, POLYGON_ATTS);
+            return <Polygon key={i} {...componentAtts}>{childs}</Polygon>;
         default:
           return null;
         }
