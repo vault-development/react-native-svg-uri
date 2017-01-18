@@ -25,7 +25,14 @@ react-native link react-native-svg # not react-native-svg-uri !!!
 | Prop | Type | Default | Note |
 |---|---|---|---|
 | `source` | `ImageSource` |  | Same kind of `source` prop that `<Image />` component has
+| `svgXmlData` | `String` |  | You can pass the SVG as String directly
 | `fill` | `Color` |  | Overrides all fill attributes of the svg file
+
+## Known Bugs
+
+- [ANDROID] There is a problem with static SVG file on Android,
+  Works OK in debug mode but fails to load the file in release mode.
+  At the momment the only workarround is to pass the svg content in the svgXmlData prop.
 
 ## <a name="Usage">Usage</a>
 
