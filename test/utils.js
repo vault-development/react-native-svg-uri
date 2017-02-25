@@ -5,7 +5,7 @@ import {transformStyle, camelCase, removePixelsFromNodeValue, getEnabledAttribut
 describe('transformStyle', () => {
   it('transforms style attribute', () => {
     expect(
-      transformStyle({nodeName: 'style', nodeValue: 'fill:rgb(0,0,255);stroke:rgb(0,0,0)'})
+      transformStyle('style', 'fill:rgb(0,0,255);stroke:rgb(0,0,0)')
     ).to.deep.equal({
       fill: 'rgb(0,0,255)',
       stroke: 'rgb(0,0,0)',
@@ -14,7 +14,7 @@ describe('transformStyle', () => {
 
   it('transforms style attribute with dash-case attribute', () => {
     expect(
-      transformStyle({nodeName: 'style', nodeValue: 'stop-color:#ffffff'})
+      transformStyle('style', 'stop-color:#ffffff')
     ).to.deep.equal({
       stopColor: '#ffffff',
     });
