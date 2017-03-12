@@ -1,7 +1,7 @@
 'use strict';
 import React, {Component, PropTypes} from "react";
 import {View} from 'react-native';
-import xmldom from 'xmldom'; // Dependencie
+import xmldom from 'xmldom';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import Svg,{
@@ -21,36 +21,32 @@ import Svg,{
     Stop
 } from 'react-native-svg';
 
-const ACEPTED_SVG_ELEMENTS = {'svg':true, 'g':true, 'circle':true, 'path':true,
-                              'rect':true, 'linearGradient':true, 'radialGradient':true, 'stop':true};
+import * as utils from './utils';
 
+const ACEPTED_SVG_ELEMENTS = [
+  'svg',
+  'g',
+  'circle',
+  'path',
+  'rect',
+  'linearGradient',
+  'radialGradient',
+  'stop',
+  'ellipse',
+  'polygon'
+];
 
 // Attributes from SVG elements that are mapped directly.
-const SVG_ATTS = {'viewBox':true};
-const G_ATTS = {'id':true};
-const CIRCLE_ATTS = {'cx':true, 'cy':true, 'r':true, 'fill':true, 'stroke':true};
-const PATH_ATTS = {'d':true, 'fill':true, 'stroke':true};
-const RECT_ATTS = {'width':true, 'height':true, 'fill':true, 'stroke':true};
-const LINEARG_ATTS = {'id':true, 'x1':true, 'y1':true, 'x2':true, 'y2':true};
-const RADIALG_ATTS = {'id':true, 'cx':true, 'cy':true, 'r':true};
-const STOP_ATTS = {'offset':true};
-
-// Attributes that have a transformation of value
-const SVG_ATTS_TRANSFORM = {'x':true, 'y':true, 'height':true, 'width':true }; //'viewBox':true
-const G_ATTS_TRANSFORM = {};
-const CIRCLE_ATTS_TRANSFORM = {'style':true};
-const PATH_ATTS_TRANSFORM = {'style':true};
-const RECT_ATTS_TRANSFORM = {'style':true};
-const LINEARG_ATTS_TRANSFORM = {};
-const RADIALG_ATTS_TRANSFORM = {}; // Its not working
-const STOP_ATTS_TRANSFORM = {'style':true};
-
-// Attributes that only change his name
-const ATTS_TRANSFORMED_NAMES={'stroke-linejoin':'strokeLinejoin',
-                              'stroke-linecap':'strokeLinecap',
-                              'stroke-width':'strokeWidth',
-                            //  'stroke-miterlimit':'strokeMiterlimit',
-                              };
+const SVG_ATTS = ['viewBox'];
+const G_ATTS = ['id'];
+const CIRCLE_ATTS = ['cx', 'cy', 'r', 'fill', 'stroke'];
+const PATH_ATTS = ['d', 'fill', 'stroke'];
+const RECT_ATTS = ['width', 'height', 'fill', 'stroke', 'x', 'y'];
+const LINEARG_ATTS = ['id', 'x1', 'y1', 'x2', 'y2'];
+const RADIALG_ATTS = ['id', 'cx', 'cy', 'r'];
+const STOP_ATTS = ['offset'];
+const ELLIPSE_ATTS = ['fill', 'cx', 'cy', 'rx', 'ry'];
+const POLYGON_ATTS = ['points'];
 
 let ind = 0;
 
@@ -62,10 +58,11 @@ class SvgUri extends Component{
     this.state = {svgXmlData: props.svgXmlData};
 
     this.createSVGElement     = this.createSVGElement.bind(this);
-    this.transformSVGAtt      = this.transformSVGAtt.bind(this);
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
     this.inspectNode          = this.inspectNode.bind(this);
     this.fecthSVGData         = this.fecthSVGData.bind(this);
+
+    this.isComponentMounted   = false;
 
     // Gets the image data from an URL or a static file
     if (props.source) {
@@ -73,6 +70,14 @@ class SvgUri extends Component{
         this.fecthSVGData(source.uri);
     }
 	}
+
+  componentWillMount() {
+      this.isComponentMounted = true;
+  }
+
+  componentWillUnmount() {
+      this.isComponentMounted = false
+  }
 
   componentWillReceiveProps (nextProps){
     if (nextProps.source) {
@@ -88,23 +93,27 @@ class SvgUri extends Component{
   } 
 
   async fecthSVGData(uri){
+     let responseXML = null;
      try {
          let response = await fetch(uri);
-         let responseXML = await response.text();
-         this.setState({svgXmlData:responseXML});
-         return responseXML;
-     } catch(error) {
-        console.error(error);
+         responseXML = await response.text();
+     } catch(e) {
+        console.error("ERROR SVG", e);
+     }finally {
+      	if (this.isComponentMounted) {
+      	     this.setState({svgXmlData:responseXML});
+      	}
      }
-  }
 
+     return responseXML;
+  }
 
   createSVGElement(node, childs){
         let componentAtts = {};
         let i = ind++;
         switch (node.nodeName) {
         case 'svg':
-             componentAtts = this.obtainComponentAtts(node, SVG_ATTS, SVG_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, SVG_ATTS);
              if (this.props.width)
                 componentAtts.width = this.props.width;
              if (this.props.height)
@@ -112,81 +121,54 @@ class SvgUri extends Component{
 
              return <Svg key={i} {...componentAtts}>{childs}</Svg>;
         case 'g':
-             componentAtts = this.obtainComponentAtts(node, G_ATTS, G_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, G_ATTS);
             return <G key={i} {...componentAtts}>{childs}</G>;
         case 'path':
-             componentAtts = this.obtainComponentAtts(node, PATH_ATTS, PATH_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
             return <Path key={i} {...componentAtts}>{childs}</Path>;
         case 'circle':
-             componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS, CIRCLE_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
             return <Circle key={i} {...componentAtts}>{childs}</Circle>;
         case 'rect':
-             componentAtts = this.obtainComponentAtts(node, RECT_ATTS, RECT_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, RECT_ATTS);
             return <Rect key={i} {...componentAtts}>{childs}</Rect>;
         case 'linearGradient':
-             componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS, LINEARG_ATTS_TRANSFORM);
-            return <Defs><LinearGradient key={i} {...componentAtts}>{childs}</LinearGradient></Defs>;
+             componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS);
+            return <Defs key={i}><LinearGradient {...componentAtts}>{childs}</LinearGradient></Defs>;
         case 'radialGradient':
-             componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS, RADIALG_ATTS_TRANSFORM);
-            return <Defs><RadialGradient key={i} {...componentAtts}>{childs}</RadialGradient></Defs>;
+             componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS);
+            return <Defs key={i}><RadialGradient {...componentAtts}>{childs}</RadialGradient></Defs>;
         case 'stop':
-             componentAtts = this.obtainComponentAtts(node, STOP_ATTS, STOP_ATTS_TRANSFORM);
+             componentAtts = this.obtainComponentAtts(node, STOP_ATTS);
             return <Stop key={i} {...componentAtts}>{childs}</Stop>;
+        case 'ellipse':
+             componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS);
+            return <Ellipse key={i} {...componentAtts}>{childs}</Ellipse>;
+        case 'polygon':
+             componentAtts = this.obtainComponentAtts(node, POLYGON_ATTS);
+            return <Polygon key={i} {...componentAtts}>{childs}</Polygon>;
         default:
           return null;
-          break;
         }
   }
 
-  obtainComponentAtts(node, ATTS_ENABLED, ATTS_TRANSFORM){
-      let componentAtts = {};
-      for (let i = 0; i < node.attributes.length; i++){
-          let att = node.attributes[i];
-          if (att.nodeName in ATTS_TRANSFORM){
-              att = this.transformSVGAtt(node.nodeName, att.nodeName, att.nodeValue);
-              componentAtts = Object.assign({}, componentAtts, att);
-          }else{
+  obtainComponentAtts({attributes}, enabledAttributes) {
+    let styleAtts = {};
+    Array.from(attributes).forEach(({nodeName, nodeValue}) => {
+                Object.assign(styleAtts, utils.transformStyle(nodeName, nodeValue, this.props.fill));
+    });
 
-              if (att.nodeName in ATTS_TRANSFORMED_NAMES){
-                componentAtts[ATTS_TRANSFORMED_NAMES[att.nodeName]] = att.nodeValue;
-              }else{
-                  if (att.nodeName in ATTS_ENABLED){ // Valida que el atributo sea mapeable
-                      componentAtts[att.nodeName] = att.nodeValue;
-                  }else{
-                      ;
-                  }
-              }
-          }
-      }
-      return componentAtts;
-  }
+    let componentAtts =  Array.from(attributes)
+      .map(utils.camelCaseNodeName)
+      .map(utils.removePixelsFromNodeValue)
+      .filter(utils.getEnabledAttributes(enabledAttributes))
+      .reduce((acc, {nodeName, nodeValue}) => ({
+        ...acc,
+        [nodeName]: this.props.fill && nodeName === 'fill' ? this.props.fill : nodeValue,
+      }), {});
+    Object.assign(componentAtts, styleAtts);
 
-  transformSVGAtt(component, attName, attValue){
-      if (attName == 'style'){
-          let styleAtts = attValue.split(';');
-          let newAtts = {};
-          for (let i = 0; i < styleAtts.length; i++){
-              let styleAtt = styleAtts[i].split(':');
-              if (!styleAtt[1] || styleAtt[1] == '')
-                  continue;
-              if (styleAtt[0] == 'stop-color')
-                  newAtts['stopColor'] = styleAtt[1];
-              else
-                  newAtts[styleAtt[0]] = styleAtt[1];
-          }
-          return newAtts;
-      }
-
-      if (attName == 'x' || attName == 'y' || attName == 'height' || attName == 'width'){
-          let newAtts = {};
-          newAtts[attName] = attValue.replace('px', ''); // Remove the px
-          return newAtts;
-      }
-      if (attName == 'viewBox'){
-        let newAtts = {};
-        newAtts['viewbox'] = attValue; // El atributo va en minuscula
-        return newAtts;
-      }
+    return componentAtts;
   }
 
   inspectNode(node){
@@ -194,7 +176,7 @@ class SvgUri extends Component{
       let arrayElements = [];
 
       // Only process accepted elements
-      if(!(node.nodeName in ACEPTED_SVG_ELEMENTS))
+      if (!ACEPTED_SVG_ELEMENTS.includes(node.nodeName))
           return null;
       // if have children process them.
 
@@ -231,6 +213,10 @@ class SvgUri extends Component{
       return null;
     }
 	}
+}
+
+SvgUri.propTypes = {
+  fill: PropTypes.string,
 }
 
 module.exports = SvgUri;
