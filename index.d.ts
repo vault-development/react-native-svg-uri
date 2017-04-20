@@ -10,12 +10,12 @@ interface SvgUriProps {
     /**
      * The width of the rendered svg
      */
-    width: number | string
+    width?: number | string
 
     /**
      * The height of the rendered svg
      */
-    height: number | string
+    height?: number | string
 
     /**
      * Source path for the .svg file
@@ -23,7 +23,7 @@ interface SvgUriProps {
      * e.g. source={require('my-path')}
      * e.g. source={{ur: 'my-path'}}
      */
-    source: ImageURISource
+    source?: ImageURISource
 
     /**
      * Direct svg code to render. Similar to inline svg
