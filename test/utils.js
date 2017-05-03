@@ -42,10 +42,11 @@ describe('camelCase', () => {
 
 describe('getEnabledAttributes', () => {
   it('return true when nodeName is found', () => {
-    const enabledAttributes = ['x', 'y'];
+    const enabledAttributes = ['x', 'y', 'strokeOpacity'];
     const hasEnabledAttribute = getEnabledAttributes(enabledAttributes);
 
     expect(hasEnabledAttribute({nodeName: 'x'})).to.deep.equal(true);
+    expect(hasEnabledAttribute({nodeName: 'stroke-opacity'})).to.deep.equal(true);
   });
 
   it('return false when nodeName is not found', () => {
