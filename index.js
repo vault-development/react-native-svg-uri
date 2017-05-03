@@ -29,6 +29,7 @@ const ACEPTED_SVG_ELEMENTS = [
   'circle',
   'path',
   'rect',
+  'defs',
   'linearGradient',
   'radialGradient',
   'stop',
@@ -39,13 +40,15 @@ const ACEPTED_SVG_ELEMENTS = [
 // Attributes from SVG elements that are mapped directly.
 const SVG_ATTS = ['viewBox'];
 const G_ATTS = ['id'];
+
 const CIRCLE_ATTS = ['cx', 'cy', 'r'];
 const PATH_ATTS = ['d'];
 const RECT_ATTS = ['width', 'height'];
-const LINEARG_ATTS = ['id', 'x1', 'y1', 'x2', 'y2'];
-const RADIALG_ATTS = ['id', 'cx', 'cy', 'r'];
+const LINEARG_ATTS = ['id', 'x1', 'y1', 'x2', 'y2', 'gradientUnits'];
+const RADIALG_ATTS = ['id', 'cx', 'cy', 'r', 'gradientUnits'];
 const STOP_ATTS = ['offset'];
 const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry'];
+
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
 
@@ -133,12 +136,14 @@ class SvgUri extends Component{
         case 'rect':
              componentAtts = this.obtainComponentAtts(node, RECT_ATTS);
             return <Rect key={i} {...componentAtts}>{childs}</Rect>;
+        case 'defs': 
+            return <Defs key={i}>{childs}</Defs>;
         case 'linearGradient':
              componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS);
-            return <Defs key={i}><LinearGradient {...componentAtts}>{childs}</LinearGradient></Defs>;
+            return <LinearGradient key={i} {...componentAtts}>{childs}</LinearGradient>;
         case 'radialGradient':
              componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS);
-            return <Defs key={i}><RadialGradient {...componentAtts}>{childs}</RadialGradient></Defs>;
+            return <RadialGradient key={i} {...componentAtts}>{childs}</RadialGradient>;
         case 'stop':
              componentAtts = this.obtainComponentAtts(node, STOP_ATTS);
             return <Stop key={i} {...componentAtts}>{childs}</Stop>;
