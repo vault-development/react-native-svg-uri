@@ -28,6 +28,7 @@ const ACEPTED_SVG_ELEMENTS = [
   'g',
   'circle',
   'path',
+  'line',
   'rect',
   'defs',
   'linearGradient',
@@ -52,7 +53,7 @@ const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry'];
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
 
-const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'strokeLinecap', 'strokeLinejoin',
+const COMMON_ATTS = ['fill', 'fillOpacity', 'opacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'strokeLinecap', 'strokeLinejoin',
     'strokeDasharray', 'strokeDashoffset', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY'];
 
 let ind = 0;
@@ -130,6 +131,9 @@ class SvgUri extends Component{
         case 'path':
              componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
             return <Path key={i} {...componentAtts}>{childs}</Path>;
+        case 'line':
+            componentAtts = this.obtainComponentAtts(node, LINE_ATTS);
+            return <Line key={i} {...componentAtts}>{childs}</Line>;
         case 'circle':
              componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
             return <Circle key={i} {...componentAtts}>{childs}</Circle>;
