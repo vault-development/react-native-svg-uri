@@ -4,7 +4,7 @@ export const camelCaseNodeName = ({nodeName, nodeValue}) => ({nodeName: camelCas
 
 export const removePixelsFromNodeValue = ({nodeName, nodeValue}) => ({nodeName, nodeValue: nodeValue.replace('px', '')});
 
-export const transformStyle = (nodeName, nodeValue, fillProp) => {
+export const transformStyle = ({nodeName, nodeValue, fillProp}) => {
   if (nodeName === 'style') {
     return nodeValue.split(';')
       .reduce((acc, attribute) => {
@@ -18,4 +18,4 @@ export const transformStyle = (nodeName, nodeValue, fillProp) => {
   return null;
 };
 
-export const getEnabledAttributes = enabledAttributes => ({nodeName}) => enabledAttributes.includes(nodeName);
+export const getEnabledAttributes = enabledAttributes => ({nodeName}) => enabledAttributes.includes(camelCase(nodeName));
