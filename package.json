@@ -17,11 +17,17 @@
     "uri",
     "http"
   ],
+  "files": [
+    "index.js",
+    "utils.js"
+  ],
   "author": "Matias Cortes",
   "license": "ISC",
   "dependencies": {
-    "react-native-svg": "5.1.6",
     "xmldom": "^0.1.22"
+  },
+  "peerDependencies": {
+    "react-native-svg": "5.1.7"
   },
   "bugs": {
     "url": "https://github.com/matiascba/react-native-svg-uri/issues"
