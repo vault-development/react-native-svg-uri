@@ -94,7 +94,10 @@ class SvgUri extends Component{
             this.fecthSVGData(source.uri);
         }
     }
-  }
+    if(nextProps.svgXmlData !== this.props.svgXmlData){
+      this.setState({svgXmlData:nextProps.svgXmlData});
+    }
+  } 
 
   async fecthSVGData(uri){
      let responseXML = null;

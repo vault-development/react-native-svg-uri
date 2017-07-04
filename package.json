@@ -17,6 +17,10 @@
     "uri",
     "http"
   ],
+  "files": [
+    "index.js",
+    "utils.js"
+  ],
   "author": "Matias Cortes",
   "license": "ISC",
   "dependencies": {
