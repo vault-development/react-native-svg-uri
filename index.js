@@ -216,12 +216,12 @@ class SvgUri extends Component{
       }));
     });
 
-    const componentAtts =  Array.from(attributes)
+     const componentAtts =  Array.from(attributes)
       .map(utils.camelCaseNodeName)
       .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, {nodeName, nodeValue}) => {
-        acc[nodeName] = this.state.fill && nodeName === 'fill' ? this.state.fill : nodeValue
+        acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : nodeValue
         return acc
       }, {});
     Object.assign(componentAtts, styleAtts);
