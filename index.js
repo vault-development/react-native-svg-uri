@@ -201,6 +201,9 @@ class SvgUri extends Component{
       return element;
   }
 
+    setNativeProps(nativeProps) {
+      this._root.setNativeProps(nativeProps);
+    }
 	render(){
     try{
         if (this.state.svgXmlData == null)
@@ -213,7 +216,7 @@ class SvgUri extends Component{
         let rootSVG = this.inspectNode(doc.childNodes[0]);
 
         return(
-            <View style={this.props.style}>
+            <View style={this.props.style} ref={component => this._root = component}>
               {rootSVG}
             </View>
         );
