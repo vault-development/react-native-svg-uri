@@ -1,6 +1,6 @@
 {
   "name": "react-native-svg-uri",
-  "version": "1.1.2",
+  "version": "1.2.1",
   "description": "Render an SVG Image from an URL",
   "main": "index.js",
   "scripts": {
@@ -20,14 +20,18 @@
   "author": "Matias Cortes",
   "license": "ISC",
   "dependencies": {
-    "xmldom": "^0.1.22",
-    "react-native-svg": "^4.3.1"
+    "xmldom": "^0.1.22"
+  },
+  "peerDependencies": {
+    "react-native-svg": "^5.3.0"
   },
   "bugs": {
     "url": "https://github.com/matiascba/react-native-svg-uri/issues"
   },
   "homepage": "https://github.com/matiascba/react-native-svg-uri#readme",
   "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-preset-react-native": "^2.1.0",
     "chai": "^3.5.0",
     "mocha": "^3.2.0"
   }
