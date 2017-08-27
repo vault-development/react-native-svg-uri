@@ -22,7 +22,7 @@ import Svg,{
 
 import * as utils from './utils';
 
-const ACEPTED_SVG_ELEMENTS = [
+const ACCEPTED_SVG_ELEMENTS = [
   'svg',
   'g',
   'circle',
@@ -35,6 +35,7 @@ const ACEPTED_SVG_ELEMENTS = [
   'stop',
   'ellipse',
   'polygon',
+  'polyline',
   'text',
   'tspan'
 ];
@@ -221,7 +222,7 @@ class SvgUri extends Component{
 
   inspectNode(node){
     // Only process accepted elements
-    if (!ACEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
+    if (!ACCEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
       return null;
     }
 
