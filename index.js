@@ -58,7 +58,7 @@ const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight']
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
 
-const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity', 
+const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
     'strokeLinecap', 'strokeLinejoin',
     'strokeDasharray', 'strokeDashoffset', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY'];
 
@@ -103,12 +103,12 @@ class SvgUri extends Component{
   }
 
   componentWillReceiveProps (nextProps){
-    if (nextProps.source) { 
+    if (nextProps.source) {
       const source = resolveAssetSource(nextProps.source) || {};
       const oldSource = resolveAssetSource(this.props.source) || {};
       if(source.uri !== oldSource.uri){
         this.fetchSVGData(source.uri);
-      } 
+      }
     }
 
     if (nextProps.svgXmlData !== this.props.svgXmlData) {
@@ -212,13 +212,13 @@ class SvgUri extends Component{
       Object.assign(styleAtts, utils.transformStyle({
         nodeName,
         nodeValue,
-        fillProp: this.props.fill
+        fillProp: this.state.fill
       }));
     });
 
     const componentAtts =  Array.from(attributes)
       .map(utils.camelCaseNodeName)
-      .map(utils.removePixelsFromNodeValue) 
+      .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, {nodeName, nodeValue}) => {
         acc[nodeName] = this.state.fill && nodeName === 'fill' ? this.state.fill : nodeValue
