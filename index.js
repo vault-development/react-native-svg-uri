@@ -139,8 +139,19 @@ class SvgUri extends Component{
 
     return responseXML;
   }
+   
+  // Remove empty strings from children array  
+  trimElementChilden(children) {
+    for (child of children) {
+      if (typeof child === 'string') {
+        if (child.trim.length === 0)
+          children.splice(children.indexOf(child), 1); 
+      }
+    }
+  }
 
   createSVGElement(node, childs){
+    this.trimElementChilden(childs);
     let componentAtts = {};
     const i = ind++;
     switch (node.nodeName) {
