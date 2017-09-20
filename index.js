@@ -125,28 +125,34 @@ class SvgUri extends Component{
     this.isComponentMounted = false
   }
 
-  async fetchSVGData(uri){
-    let responseXML = null;
+  async fetchSVGData(uri) {
+    let responseXML = null, error = null;
     try {
       const response = await fetch(uri);
       responseXML = await response.text();
     } catch(e) {
+      error = e;
       console.error("ERROR SVG", e);
     } finally {
       if (this.isComponentMounted) {
-        this.setState({svgXmlData:responseXML});
+        this.setState({ svgXmlData: responseXML }, () => {
+          const { onLoad } = this.props;
+          if (onLoad && !error) {
+            onLoad();
+          }
+        });
       }
     }
 
     return responseXML;
   }
-   
-  // Remove empty strings from children array  
+
+  // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
       if (typeof child === 'string') {
         if (child.trim.length === 0)
-          children.splice(children.indexOf(child), 1); 
+          children.splice(children.indexOf(child), 1);
       }
     }
   }
@@ -303,6 +309,7 @@ SvgUri.propTypes = {
   svgXmlData: PropTypes.string,
   source: PropTypes.any,
   fill: PropTypes.string,
+  onLoad: PropTypes.func,
 }
 
 module.exports = SvgUri;
