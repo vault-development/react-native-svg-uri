@@ -18,6 +18,7 @@ import Svg,{
     Text,
     TSpan,
     Defs,
+    Image,
     Stop
 } from 'react-native-svg';
 
@@ -38,6 +39,7 @@ const ACCEPTED_SVG_ELEMENTS = [
   'polygon',
   'polyline',
   'text',
+  'image',
   'tspan'
 ];
 
@@ -55,6 +57,8 @@ const STOP_ATTS = ['offset'];
 const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry'];
 
 const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight']
+
+const IMAGE_ATTS = ['width', 'height', 'preserveAspectRatio', 'href', 'clipPath']
 
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
@@ -134,19 +138,20 @@ class SvgUri extends Component{
       console.error("ERROR SVG", e);
     } finally {
       if (this.isComponentMounted) {
+        responseXML = this.replaceSVGProps(responseXML);
         this.setState({svgXmlData:responseXML});
       }
     }
 
     return responseXML;
   }
-   
-  // Remove empty strings from children array  
+
+  // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
       if (typeof child === 'string') {
         if (child.trim.length === 0)
-          children.splice(children.indexOf(child), 1); 
+          children.splice(children.indexOf(child), 1);
       }
     }
   }
@@ -207,6 +212,12 @@ class SvgUri extends Component{
         componentAtts.y = fixYPosition(componentAtts.y, node)
       }
       return <Text key={i} {...componentAtts}>{childs}</Text>;
+    case 'image':
+      componentAtts = this.obtainComponentAtts(node, IMAGE_ATTS);
+      if (componentAtts.y) {
+        componentAtts.y = fixYPosition(componentAtts.y, node)
+      }
+      return <Image key={i} {...componentAtts}>{childs}</Image>;
     case 'tspan':
       componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
       if (componentAtts.y) {
@@ -228,12 +239,15 @@ class SvgUri extends Component{
       }));
     });
 
-     const componentAtts =  Array.from(attributes)
+    const componentAtts =  Array.from(attributes)
       .map(utils.camelCaseNodeName)
       .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, {nodeName, nodeValue}) => {
         acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : nodeValue
+
+        acc[nodeName] = (this.state.href && nodeName === 'href') ? '{{uri: "' + this.state.href + '"}}' : nodeValue
+
         return acc
       }, {});
     Object.assign(componentAtts, styleAtts);
@@ -267,6 +281,14 @@ class SvgUri extends Component{
     }
 
     return this.createSVGElement(node, arrayElements);
+  }
+
+  replaceSVGProps (svgXmlData) {
+    if (this.state.fill) {
+      const regexp = /fill=["']#[A-F0-9]{3,6}["']/gm;
+      svgXmlData = svgXmlData.replace(regexp, `fill="${this.state.fill}"`);
+    }
+    return svgXmlData
   }
 
   render () {
