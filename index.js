@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {View} from 'react-native';
 import PropTypes from 'prop-types'
 import xmldom from 'xmldom';
+import Regexp from 'regexp';
+
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import Svg,{
@@ -285,8 +287,36 @@ class SvgUri extends Component{
 
   replaceSVGProps (svgXmlData) {
     if (this.state.fill) {
-      const regexp = /fill=["']#[A-F0-9]{3,6}["']/gm;
-      svgXmlData = svgXmlData.replace(regexp, `fill="${this.state.fill}"`);
+      let regexp = /fill=["']#[A-F0-9]{3,6}["']/gm;
+
+      switch (typeof this.state.fill) {
+        case 'string':
+          svgXmlData = svgXmlData.replace(regexp, `fill="${this.state.fill}"`);
+          break;
+
+        // pass associative key - value object, with example {'#fff': '#000'}
+        case 'object':
+          // mappable object
+          let fill;
+          const colors = [];
+          let isArray = false;
+          Object.keys(this.state.fill).map(key => {
+            fill = this.state.fill[key].replace('#', '');
+            if (isNaN(parseInt(key))) {
+              svgXmlData = svgXmlData.split('fill="#' + key + '"').join('fill="#' + fill + '"');
+            } else {
+              isArray = true;
+            }
+          });
+          if (isArray && this.state.fill.length) {
+            svgXmlData = svgXmlData.split(regexp).map(
+              (str, i) => this.state.fill[i] ? `${str}fill="#${this.state.fill[i].replace('#', '')}"` : str
+              ).join('');
+          }
+          break;
+        default:
+          throw new Error('unknown color');
+      }
     }
     return svgXmlData
   }
@@ -324,7 +354,7 @@ SvgUri.propTypes = {
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   svgXmlData: PropTypes.string,
   source: PropTypes.any,
-  fill: PropTypes.string,
+  fill: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.shape()])
 }
 
 module.exports = SvgUri;
