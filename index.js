@@ -177,7 +177,7 @@ class SvgUri extends Component{
       return <G key={i} {...componentAtts}>{childs}</G>;
     case 'clipPath':
       componentAtts = this.obtainComponentAtts(node, CLIP_PATH_ATTS);
-      return <ClipPath key={i} {...componentAtts}>{childs}</G>;
+      return <ClipPath key={i} {...componentAtts}>{childs}</ClipPath>;
     case 'path':
       componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
       return <Path key={i} {...componentAtts}>{childs}</Path>;
