@@ -89,7 +89,7 @@ class SvgUri extends Component{
   constructor(props){
     super(props);
 
-    this.state = {fill: props.fill, svgXmlData: props.svgXmlData};
+    this.state = {fill: props.fill, stroke: props.stroke, svgXmlData: props.svgXmlData};
 
     this.createSVGElement     = this.createSVGElement.bind(this);
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
@@ -311,6 +311,39 @@ class SvgUri extends Component{
           if (isArray && this.state.fill.length) {
             svgXmlData = svgXmlData.split(regexp).map(
               (str, i) => this.state.fill[i] ? `${str}fill="#${this.state.fill[i].replace('#', '')}"` : str
+              ).join('');
+          }
+          break;
+        default:
+          throw new Error('unknown color');
+      }
+    }
+    // stroke
+    if (this.state.stroke) {
+      let regexp = /stroke=["']#[A-F0-9]{3,6}["']/gm;
+
+      switch (typeof this.state.stroke) {
+        case 'string':
+          svgXmlData = svgXmlData.replace(regexp, `stroke="${this.state.stroke}"`);
+          break;
+
+        // pass associative key - value object, with example {'#fff': '#000'}
+        case 'object':
+          // mappable object
+          let fill;
+          const colors = [];
+          let isArray = false;
+          Object.keys(this.state.stroke).map(key => {
+            stroke = this.state.stroke[key].replace('#', '');
+            if (isNaN(parseInt(key))) {
+              svgXmlData = svgXmlData.split('stroke="#' + key + '"').join('stroke="#' + fill + '"');
+            } else {
+              isArray = true;
+            }
+          });
+          if (isArray && this.state.stroke.length) {
+            svgXmlData = svgXmlData.split(regexp).map(
+              (str, i) => this.state.stroke[i] ? `${str}fill="#${this.state.stroke[i].replace('#', '')}"` : str
               ).join('');
           }
           break;
