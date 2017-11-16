@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {View} from 'react-native';
 import PropTypes from 'prop-types'
 import xmldom from 'xmldom';
+import Regexp from 'regexp';
+
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import Svg,{
@@ -18,6 +20,7 @@ import Svg,{
     Text,
     TSpan,
     Defs,
+    Image,
     Stop
 } from 'react-native-svg';
 
@@ -38,6 +41,7 @@ const ACCEPTED_SVG_ELEMENTS = [
   'polygon',
   'polyline',
   'text',
+  'image',
   'tspan'
 ];
 
@@ -47,7 +51,7 @@ const G_ATTS = ['id'];
 
 const CIRCLE_ATTS = ['cx', 'cy', 'r'];
 const PATH_ATTS = ['d'];
-const RECT_ATTS = ['width', 'height'];
+const RECT_ATTS = ['width', 'height', 'rx', 'ry'];
 const LINE_ATTS = ['x1', 'y1', 'x2', 'y2'];
 const LINEARG_ATTS = LINE_ATTS.concat(['id', 'gradientUnits']);
 const RADIALG_ATTS = CIRCLE_ATTS.concat(['id', 'gradientUnits']);
@@ -55,6 +59,8 @@ const STOP_ATTS = ['offset'];
 const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry'];
 
 const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight']
+
+const IMAGE_ATTS = ['width', 'height', 'preserveAspectRatio', 'href', 'clipPath']
 
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
@@ -83,7 +89,7 @@ class SvgUri extends Component{
   constructor(props){
     super(props);
 
-    this.state = {fill: props.fill, svgXmlData: props.svgXmlData};
+    this.state = {fill: props.fill, stroke: props.stroke, svgXmlData: props.svgXmlData};
 
     this.createSVGElement     = this.createSVGElement.bind(this);
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
@@ -134,19 +140,20 @@ class SvgUri extends Component{
       console.error("ERROR SVG", e);
     } finally {
       if (this.isComponentMounted) {
+        responseXML = this.replaceSVGProps(responseXML);
         this.setState({svgXmlData:responseXML});
       }
     }
 
     return responseXML;
   }
-   
-  // Remove empty strings from children array  
+
+  // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
       if (typeof child === 'string') {
         if (child.trim.length === 0)
-          children.splice(children.indexOf(child), 1); 
+          children.splice(children.indexOf(child), 1);
       }
     }
   }
@@ -207,6 +214,12 @@ class SvgUri extends Component{
         componentAtts.y = fixYPosition(componentAtts.y, node)
       }
       return <Text key={i} {...componentAtts}>{childs}</Text>;
+    case 'image':
+      componentAtts = this.obtainComponentAtts(node, IMAGE_ATTS);
+      if (componentAtts.y) {
+        componentAtts.y = fixYPosition(componentAtts.y, node)
+      }
+      return <Image key={i} {...componentAtts}>{childs}</Image>;
     case 'tspan':
       componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
       if (componentAtts.y) {
@@ -228,12 +241,15 @@ class SvgUri extends Component{
       }));
     });
 
-     const componentAtts =  Array.from(attributes)
+    const componentAtts =  Array.from(attributes)
       .map(utils.camelCaseNodeName)
       .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, {nodeName, nodeValue}) => {
         acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : nodeValue
+
+        acc[nodeName] = (this.state.href && nodeName === 'href') ? '{{uri: "' + this.state.href + '"}}' : nodeValue
+
         return acc
       }, {});
     Object.assign(componentAtts, styleAtts);
@@ -269,6 +285,75 @@ class SvgUri extends Component{
     return this.createSVGElement(node, arrayElements);
   }
 
+  replaceSVGProps (svgXmlData) {
+    if (this.state.fill) {
+      let regexp = /fill=["']#[A-F0-9]{3,6}["']/gm;
+
+      switch (typeof this.state.fill) {
+        case 'string':
+          svgXmlData = svgXmlData.replace(regexp, `fill="${this.state.fill}"`);
+          break;
+
+        // pass associative key - value object, with example {'#fff': '#000'}
+        case 'object':
+          // mappable object
+          let fill;
+          const colors = [];
+          let isArray = false;
+          Object.keys(this.state.fill).map(key => {
+            fill = this.state.fill[key].replace('#', '');
+            if (isNaN(parseInt(key))) {
+              svgXmlData = svgXmlData.split('fill="#' + key + '"').join('fill="#' + fill + '"');
+            } else {
+              isArray = true;
+            }
+          });
+          if (isArray && this.state.fill.length) {
+            svgXmlData = svgXmlData.split(regexp).map(
+              (str, i) => this.state.fill[i] ? `${str}fill="#${this.state.fill[i].replace('#', '')}"` : str
+              ).join('');
+          }
+          break;
+        default:
+          throw new Error('unknown color');
+      }
+    }
+    // stroke
+    if (this.state.stroke) {
+      let regexp = /stroke=["']#[A-F0-9]{3,6}["']/gm;
+
+      switch (typeof this.state.stroke) {
+        case 'string':
+          svgXmlData = svgXmlData.replace(regexp, `stroke="${this.state.stroke}"`);
+          break;
+
+        // pass associative key - value object, with example {'#fff': '#000'}
+        case 'object':
+          // mappable object
+          let fill;
+          const colors = [];
+          let isArray = false;
+          Object.keys(this.state.stroke).map(key => {
+            stroke = this.state.stroke[key].replace('#', '');
+            if (isNaN(parseInt(key))) {
+              svgXmlData = svgXmlData.split('stroke="#' + key + '"').join('stroke="#' + fill + '"');
+            } else {
+              isArray = true;
+            }
+          });
+          if (isArray && this.state.stroke.length) {
+            svgXmlData = svgXmlData.split(regexp).map(
+              (str, i) => this.state.stroke[i] ? `${str}fill="#${this.state.stroke[i].replace('#', '')}"` : str
+              ).join('');
+          }
+          break;
+        default:
+          throw new Error('unknown color');
+      }
+    }
+    return svgXmlData
+  }
+
   render () {
     try {
       if (this.state.svgXmlData == null) {
@@ -302,7 +387,7 @@ SvgUri.propTypes = {
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   svgXmlData: PropTypes.string,
   source: PropTypes.any,
-  fill: PropTypes.string,
+  fill: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.shape()])
 }
 
 module.exports = SvgUri;
