@@ -203,9 +203,6 @@ class SvgUri extends Component{
       return <Polyline key={i} {...componentAtts}>{childs}</Polyline>;
     case 'text':
       componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
-      if (componentAtts.y) {
-        componentAtts.y = fixYPosition(componentAtts.y, node)
-      }
       return <Text key={i} {...componentAtts}>{childs}</Text>;
     case 'tspan':
       componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
