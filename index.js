@@ -140,19 +140,8 @@ class SvgUri extends Component{
 
     return responseXML;
   }
-   
-  // Remove empty strings from children array  
-  trimElementChilden(children) {
-    for (child of children) {
-      if (typeof child === 'string') {
-        if (child.trim.length === 0)
-          children.splice(children.indexOf(child), 1); 
-      }
-    }
-  }
 
   createSVGElement(node, childs){
-    this.trimElementChilden(childs);
     let componentAtts = {};
     const i = ind++;
     switch (node.nodeName) {
@@ -247,6 +236,11 @@ class SvgUri extends Component{
       return null;
     }
 
+    const textValue = node.nodeValue;
+    if (textValue) {
+      return textValue;
+    }
+
     // Process the xml node
     const arrayElements = [];
 
@@ -254,14 +248,9 @@ class SvgUri extends Component{
     // Recursive function.
     if (node.childNodes && node.childNodes.length > 0){
         for (let i = 0; i < node.childNodes.length; i++){
-          const isTextValue = node.childNodes[i].nodeValue
-          if (isTextValue) {
-            arrayElements.push(node.childNodes[i].nodeValue)
-          } else {
-            const nodo = this.inspectNode(node.childNodes[i]);
-            if (nodo != null) {
-              arrayElements.push(nodo);
-            }
+          const nodo = this.inspectNode(node.childNodes[i]);
+          if (nodo != null) {
+            arrayElements.push(nodo);
           }
         }
     }
