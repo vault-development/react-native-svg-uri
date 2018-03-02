@@ -7,6 +7,7 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 import Svg,{
     Circle,
     Ellipse,
+    ClipPath,
     G ,
     LinearGradient,
     RadialGradient,
@@ -26,6 +27,7 @@ import * as utils from './utils';
 const ACCEPTED_SVG_ELEMENTS = [
   'svg',
   'g',
+  'clipPath',
   'circle',
   'path',
   'rect',
@@ -44,6 +46,7 @@ const ACCEPTED_SVG_ELEMENTS = [
 // Attributes from SVG elements that are mapped directly.
 const SVG_ATTS = ['viewBox', 'width', 'height'];
 const G_ATTS = ['id'];
+const CLIP_PATH_ATTS = ['id'];
 
 const CIRCLE_ATTS = ['cx', 'cy', 'r'];
 const PATH_ATTS = ['d'];
@@ -158,6 +161,9 @@ class SvgUri extends Component{
     switch (node.nodeName) {
     case 'svg':
       componentAtts = this.obtainComponentAtts(node, SVG_ATTS, styleClasses);
+      if (!componentAtts.viewBox) {
+        componentAtts.viewBox = `0 0 ${componentAtts.width} ${componentAtts.height}`;
+      }
       if (this.props.width) {
         componentAtts.width = this.props.width;
       }
@@ -169,6 +175,9 @@ class SvgUri extends Component{
     case 'g':
       componentAtts = this.obtainComponentAtts(node, G_ATTS);
       return <G key={i} {...componentAtts}>{childs}</G>;
+    case 'clipPath':
+      componentAtts = this.obtainComponentAtts(node, CLIP_PATH_ATTS);
+      return <ClipPath key={i} {...componentAtts}>{childs}</ClipPath>;
     case 'path':
       componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
       return <Path key={i} {...componentAtts}>{childs}</Path>;
@@ -310,7 +319,7 @@ class SvgUri extends Component{
           </View>
       );
     } catch(e){
-      console.error("ERROR SVG", e);
+      console.log("ERROR SVG", e);
       return null;
     }
   }
