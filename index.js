@@ -230,39 +230,27 @@ class SvgUri extends Component {
 
   obtainComponentAtts({ attributes }, enabledAttributes, styleClasses) {
     const styleAtts = {};
-    const classObj = Array.from(attributes).filter(attr => {
-      return attr.name === 'class'
-    })[0];
+    const classObj = Array.from(attributes).find(attr => attr.name === 'class');
 
-    if (classObj && styleClasses[classObj.nodeValue]) {
-      Object.keys(styleClasses[classObj.nodeValue]).forEach(key => {
-        if (utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS))({ nodeName: key })) {
-          styleAtts[key] = styleClasses[classObj.nodeValue][key];
-        }
-      });
-      if (this.props.classes && this.props.classes[classObj.nodeValue]) {
-        Object.keys(this.props.classes[classObj.nodeValue]).forEach(key => {
+    if (classObj) {
+      if (styleClasses && styleClasses[classObj.nodeValue]) {
+        Object.keys(styleClasses[classObj.nodeValue]).reduce((aggr, key) => {
           if (utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS))({ nodeName: key })) {
-            styleAtts[key] = this.props.classes[classObj.nodeValue][key];
+            aggr[key] = styleClasses[classObj.nodeValue][key];
           }
-        });
+        }, styleAtts);
       }
     }
 
     Array.from(attributes).forEach(({ nodeName, nodeValue }) => {
-      Object.assign(styleAtts, utils.transformStyle({
-        nodeName,
-        nodeValue,
-        fillProp: this.state.fill
-      }));
+      Object.assign(styleAtts, utils.transformStyle({ nodeName, nodeValue }, this.state.fill));
     });
 
     const componentAtts = Array.from(attributes)
-      .map(utils.camelCaseNodeName)
-      .map(utils.removePixelsFromNodeValue)
+      .map((p) => utils.camelCaseNodeName(utils.removePixelsFromNodeValue(p)))
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, { nodeName, nodeValue }) => {
-        acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : nodeValue
+        acc[nodeName] = nodeValue
         return acc
       }, {});
 
@@ -309,12 +297,12 @@ class SvgUri extends Component {
         return null;
       }
 
-      const inputSVG = this.state.svgXmlData.substring(
-        this.state.svgXmlData.indexOf("<svg "),
-        (this.state.svgXmlData.indexOf("</svg>") + 6)
+      const doc = new xmldom.DOMParser().parseFromString(
+        this.state.svgXmlData.substring(
+          this.state.svgXmlData.indexOf("<svg "),
+          this.state.svgXmlData.indexOf("</svg>") + 6
+        )
       );
-
-      const doc = new xmldom.DOMParser().parseFromString(inputSVG);
 
       let styleClasses = utils.extractStyleClasses(doc.childNodes[0]);
       let rootSVG = this.inspectNode(doc.childNodes[0], styleClasses);
