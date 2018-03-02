@@ -151,13 +151,13 @@ class SvgUri extends Component{
     }
   }
 
-  createSVGElement(node, childs){
+  createSVGElement(node, childs, styleClasses){
     this.trimElementChilden(childs);
     let componentAtts = {};
     const i = ind++;
     switch (node.nodeName) {
     case 'svg':
-      componentAtts = this.obtainComponentAtts(node, SVG_ATTS);
+      componentAtts = this.obtainComponentAtts(node, SVG_ATTS, styleClasses);
       if (this.props.width) {
         componentAtts.width = this.props.width;
       }
@@ -220,6 +220,26 @@ class SvgUri extends Component{
 
   obtainComponentAtts({attributes}, enabledAttributes) {
     const styleAtts = {};
+
+      const classObj = Array.from(attributes).filter(attr => {
+        return attr.name === 'class'
+      })[0];
+
+      if (classObj) {
+        Object.keys(styleClasses[classObj.nodeValue]).forEach(key => {
+          if (utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS))({nodeName: key})) {
+              styleAtts[key] = styleClasses[classObj.nodeValue][key];
+          }
+        });
+        if (this.props.classes && this.props.classes[classObj.nodeValue]) {
+          Object.keys(this.props.classes[classObj.nodeValue]).forEach(key => {
+              if (utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS))({nodeName: key})) {
+                  styleAtts[key] = this.props.classes[classObj.nodeValue][key];
+              }
+          });
+        }
+      }
+
     Array.from(attributes).forEach(({nodeName, nodeValue}) => {
       Object.assign(styleAtts, utils.transformStyle({
         nodeName,
@@ -241,7 +261,7 @@ class SvgUri extends Component{
     return componentAtts;
   }
 
-  inspectNode(node){
+  inspectNode(node, styleClasses){
     // Only process accepted elements
     if (!ACCEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
       return null;
@@ -254,11 +274,11 @@ class SvgUri extends Component{
     // Recursive function.
     if (node.childNodes && node.childNodes.length > 0){
         for (let i = 0; i < node.childNodes.length; i++){
-          const isTextValue = node.childNodes[i].nodeValue
+          const isTextValue = node.childNodes[i].nodeValue;
           if (isTextValue) {
             arrayElements.push(node.childNodes[i].nodeValue)
           } else {
-            const nodo = this.inspectNode(node.childNodes[i]);
+            const nodo = this.inspectNode(node.childNodes[i], styleClasses);
             if (nodo != null) {
               arrayElements.push(nodo);
             }
@@ -266,7 +286,7 @@ class SvgUri extends Component{
         }
     }
 
-    return this.createSVGElement(node, arrayElements);
+    return this.createSVGElement(node, arrayElements, styleClasses);
   }
 
   render () {
@@ -281,8 +301,8 @@ class SvgUri extends Component{
       );
 
       const doc = new xmldom.DOMParser().parseFromString(inputSVG);
-
-      const rootSVG = this.inspectNode(doc.childNodes[0]);
+      let styleClasses = utils.extractStyleClasses(doc.childNodes[0]);
+      let rootSVG = this.inspectNode(doc.childNodes[0], styleClasses);
 
       return(
           <View style={this.props.style}>

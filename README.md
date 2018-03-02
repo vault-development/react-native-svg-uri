@@ -27,6 +27,7 @@ react-native link react-native-svg # not react-native-svg-uri !!!
 | `source` | `ImageSource` |  | Same kind of `source` prop that `<Image />` component has
 | `svgXmlData` | `String` |  | You can pass the SVG as String directly
 | `fill` | `Color` |  | Overrides all fill attributes of the svg file
+| `classes` | `Object` |  | Overrides attributes of classes (only overrides those attributes present in the given object)
 
 ## Known Bugs
 
