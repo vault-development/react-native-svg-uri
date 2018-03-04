@@ -1,4 +1,22 @@
-import { reduce } from 'lodash';
+function fixYPosition(y, node) {
+  if (node.attributes) {
+    const attribute = node.attributes.find(({ name, value }) => name === 'font-size');
+    if (attribute) {
+      return '' + (parseFloat(y) - parseFloat(attribute.value));
+    }
+  }
+  if (!node.parentNode) {
+    return y;
+  }
+  return fixYPosition(y, node.parentNode)
+}
+
+export const fixTextAttributes = (attributes, node) => {
+  if (attributes.y != undefined) {
+    attributes.y = fixYPosition(attributes.y, node)
+  }
+  return attributes;
+}
 
 export const camelCase = value => value.replace(/-([a-z])/g, g => g[1].toUpperCase());
 
