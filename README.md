@@ -1,4 +1,5 @@
 # react-native-svg-uri
+This package will finished as a pull request to the package ault-development/react-native-svg-uri but while not feel free to make pull requests
 Render SVG images in React Native from an URL or a static file
 
 This was tested with RN 0.33 and react-native-svg 4.3.1 (depends on this library)
@@ -27,6 +28,7 @@ react-native link react-native-svg # not react-native-svg-uri !!!
 | `source` | `ImageSource` |  | Same kind of `source` prop that `<Image />` component has
 | `svgXmlData` | `String` |  | You can pass the SVG as String directly
 | `fill` | `Color` |  | Overrides all fill attributes of the svg file
+| `classes` | `Object` |  | Overrides attributes of classes (only overrides those attributes present in the given object)
 
 ## Known Bugs
 
