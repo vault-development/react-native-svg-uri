@@ -21,6 +21,21 @@ import Svg, {
   Defs,
   Stop
 } from 'react-native-svg';
+let ind = 0;
+
+function fixYPosition(y, node) {
+  if (node.attributes) {
+    const fontSizeAttr = Object.keys(node.attributes).find(a => node.attributes[a].name === 'font-size');
+    if (fontSizeAttr) {
+      return '' + (parseFloat(y) - parseFloat(node.attributes[fontSizeAttr].value));
+    }
+  }
+  if (!node.parentNode) {
+    return y;
+  }
+  return fixYPosition(y, node.parentNode)
+}
+
 
 import * as utils from './utils';
 
@@ -48,8 +63,8 @@ class SvgUri extends Component {
     'path': ['d', 'clipRule'],
     'rect': ['width', 'height', 'fill', 'x', 'y'],
     'line': ['x1', 'y1', 'x2', 'y2'],
-    'lineArg': ['x1', 'y1', 'x2', 'y2', 'id', 'gradientUnits'],
-    'radialg': ['cx', 'cy', 'r', 'id', 'gradientUnits'],
+    'linearGradient': ['x1', 'y1', 'x2', 'y2', 'id', 'gradientUnits'],
+    'radialGradient': ['cx', 'cy', 'r', 'id', 'gradientUnits'],
     'stop': ['offset'],
     'ellipse': ['cx', 'cy', 'rx', 'ry'],
     'text': ['fontFamily', 'fontSize', 'fontWeight'],
@@ -200,15 +215,13 @@ class SvgUri extends Component {
     }
 
     // Only process accepted elements
-    if (this.tagHandlers[node.nodeName]) {
+    if (!this.tagHandlers[node.nodeName]) {
       return null;
     }
 
-    // Process the xml node
-    let childrens = [];
-
     // if have children process them.
     // Recursive function.
+    let childrens = [];
     if (node.childNodes) {
       childrens = Array.from(node.childNodes).reduce((aggr, childNode) => {
         const node = this.processNode(childNode, styleClasses);
