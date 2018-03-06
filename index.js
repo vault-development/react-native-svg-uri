@@ -21,21 +21,6 @@ import Svg, {
   Defs,
   Stop
 } from 'react-native-svg';
-let ind = 0;
-
-function fixYPosition(y, node) {
-  if (node.attributes) {
-    const fontSizeAttr = Object.keys(node.attributes).find(a => node.attributes[a].name === 'font-size');
-    if (fontSizeAttr) {
-      return '' + (parseFloat(y) - parseFloat(node.attributes[fontSizeAttr].value));
-    }
-  }
-  if (!node.parentNode) {
-    return y;
-  }
-  return fixYPosition(y, node.parentNode)
-}
-
 
 import * as utils from './utils';
 
