@@ -151,7 +151,7 @@ class SvgUri extends Component {
   }
 
   overrideFillAttribute(attributes) {
-    if (!attributes.fill || attributes.fill !== 'none') {
+    if (this.state.fill && (!attributes.fill || attributes.fill !== 'none')) {
       attributes.fill = this.state.fill
     }
     return attributes;
