@@ -39,8 +39,8 @@ export const extractStyleClasses = (node) => {
 
     return classArray.reduce((acc, classObj) => {
       let [className, style] = classObj.split('{');
-      if (className !== '') {
-        acc[className.substring(1)] = extractStyle(style)
+      if (className && className !== '') {
+        acc[className] = extractStyle(style)
       }
       return acc;
     }, {})
@@ -58,3 +58,5 @@ export const extractStyle = (style, fillProp) => {
     return acc;
   }, {});
 };
+
+export const getRegExpForClassName = className => RegExp('\\.\\b' + className + '\\b');

@@ -40,59 +40,39 @@ class SvgUri extends Component {
     }
   }
 
-  acceptedAttributes = {
-    'svg': ['viewBox', 'width', 'height'],
-    'g': ['id', 'clipPath'],
-    'clipPath': ['id'],
-    'circle': ['cx', 'cy', 'r'],
-    'path': ['d', 'clipRule'],
-    'rect': ['width', 'height', 'fill', 'x', 'y'],
-    'line': ['x1', 'y1', 'x2', 'y2'],
-    'linearGradient': ['x1', 'y1', 'x2', 'y2', 'id', 'gradientUnits'],
-    'radialGradient': ['cx', 'cy', 'r', 'id', 'gradientUnits'],
-    'stop': ['offset'],
-    'ellipse': ['cx', 'cy', 'rx', 'ry'],
-    'text': ['fontFamily', 'fontSize', 'fontWeight'],
-    'polygon': ['points'],
-    'polyline': ['points'],
-    'common': ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity', 'strokeLinecap',
-      'strokeLinejoin', 'strokeDasharray', 'strokeDashoffset', 'x', 'y', 'rotate', 'scale', 'origin', 'originX',
-      'originY']
-  }
-
   tagHandlers = {
     'defs': (index, node, childs) =>
       <Defs key={index++}>{childs}</Defs>,
     'g': (index, node, childs, styleClasses) =>
-      <G key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['g'], styleClasses)}> {childs}</G>,
+      <G key={index} {...this.obtainComponentAtts(node, styleClasses)}> {childs}</G>,
     'clipPath': (index, node, childs, styleClasses) =>
-      <ClipPath key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['clipPath'], styleClasses)}>{childs}</ClipPath>,
+      <ClipPath key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</ClipPath>,
     'path': (index, node, childs, styleClasses) =>
-      <Path key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['path'], styleClasses)}>{childs}</Path>,
+      <Path key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</Path>,
     'circle': (index, node, childs, styleClasses) =>
-      <Circle key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['circle'], styleClasses)}>{childs}</Circle>,
+      <Circle key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</Circle>,
     'rect': (index, node, childs, styleClasses) =>
-      <Rect key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['rect'], styleClasses)}>{childs}</Rect>,
+      <Rect key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</Rect>,
     'line': (index, node, childs, styleClasses) =>
-      <Line key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['line'], styleClasses)}>{childs}</Line>,
+      <Line key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</Line>,
     'linearGradient': (index, node, childs, styleClasses) =>
-      <LinearGradient key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['linearGradient'], styleClasses)}>{childs}</LinearGradient>,
+      <LinearGradient key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</LinearGradient>,
     'radialGradient': (index, node, childs, styleClasses) =>
-      <RadialGradient key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['radialGradient'], styleClasses)}>{childs}</RadialGradient>,
+      <RadialGradient key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</RadialGradient>,
     'stop': (index, node, childs, styleClasses) =>
-      <Stop key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['stop'], styleClasses)}>{childs}</Stop>,
+      <Stop key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</Stop>,
     'ellipse': (index, node, childs, styleClasses) =>
-      <Ellipse key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['ellipse'], styleClasses)}>{childs}</Ellipse>,
+      <Ellipse key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</Ellipse>,
     'polygon': (index, node, childs, styleClasses) =>
-      <Polygon key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['polygon'], styleClasses)}>{childs}</Polygon>,
+      <Polygon key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</Polygon>,
     'polyline': (index, node, childs, styleClasses) =>
-      <Polyline key={index} {...this.obtainComponentAtts(node, this.acceptedAttributes['polyline'], styleClasses)}>{childs}</Polyline>,
+      <Polyline key={index} {...this.obtainComponentAtts(node, styleClasses)}>{childs}</Polyline>,
     'text': (index, node, childs, styleClasses) =>
-      <Text key={index} {...utils.fixTextAttributes(componentthis.obtainComponentAtts(node, this.acceptedAttributes['text'], styleClasses), node)}>{childs}</Text>,
+      <Text key={index} {...utils.fixTextAttributes(componentthis.obtainComponentAtts(node, styleClasses), node)}>{childs}</Text>,
     'tspan': (index, node, childs, styleClasses) =>
-      <TSpan key={index} {...utils.fixTextAttributes(componentthis.obtainComponentAtts(node, this.acceptedAttributes['text'], styleClasses), node)}>{childs}</TSpan>,
+      <TSpan key={index} {...utils.fixTextAttributes(componentthis.obtainComponentAtts(node, styleClasses), node)}>{childs}</TSpan>,
     'svg': (index, node, childs, styleClasses) =>
-      <Svg key={index} {...this.overrideRootElementAttributes(this.obtainComponentAtts(node, this.acceptedAttributes['svg'], styleClasses))}>{childs}</Svg>
+      <Svg key={index} {...this.overrideRootElementAttributes(this.obtainComponentAtts(node, styleClasses))}>{childs}</Svg>
   }
 
   componentWillMount() {
@@ -157,29 +137,30 @@ class SvgUri extends Component {
     return attributes;
   }
 
-  getStyleAttsForClass(attributes, enabledAttributes, styleClasses) {
+  getStyleAttsForClass(attributes, styleClasses) {
     const classObj = Array.from(attributes).find(attr => attr.name === 'class');
-    if (!classObj || !styleClasses || !styleClasses[classObj.nodeValue]) {
+    if (!classObj || !styleClasses) {
       return {};
     }
-    return Object.keys(styleClasses[classObj.nodeValue]).reduce((aggr, key) => {
-      if (utils.getEnabledAttributes(enabledAttributes.concat(this.acceptedAttributes.common))({ nodeName: key })) {
-        aggr[key] = styleClasses[classObj.nodeValue][key];
+    const regex = utils.getRegExpForClassName(classObj.nodeValue)
+    return Object.keys(styleClasses).reduce((aggr, key) => {
+      if(regex.test(key)){
+        Object.assign(aggr, styleClasses[key])
       }
-      return aggr;
-    }, {});
+      return aggr
+    }, {})
   }
 
-  obtainComponentAtts({ attributes }, enabledAttributes, styleClasses) {
-    const styleAtts = this.getStyleAttsForClass(attributes, enabledAttributes, styleClasses)
+  obtainComponentAtts({ attributes }, styleClasses) {
+    const styleAtts = this.getStyleAttsForClass(attributes, styleClasses)
 
     Array.from(attributes).forEach(({ nodeName, nodeValue }) => {
       Object.assign(styleAtts, utils.transformStyle({ nodeName, nodeValue }, this.state.fill));
     });
 
     const componentAtts = Array.from(attributes)
-      .map(({ nodeName, nodeValue }) => utils.removePixelsFromNodeValue(utils.camelCaseNodeName({ nodeName, nodeValue })))
-      .filter(utils.getEnabledAttributes(enabledAttributes.concat(this.acceptedAttributes.common)))
+      .map(utils.camelCaseNodeName)
+      .map(utils.removePixelsFromNodeValue)
       .reduce((acc, { nodeName, nodeValue }) => {
         acc[nodeName] = nodeValue
         return acc
