@@ -165,6 +165,10 @@ class SvgUri extends Component{
         componentAtts.height = this.props.height;
       }
 
+      if (this.props.viewBox) {
+        componentAtts.viewBox = this.props.viewBox;
+      }
+
       return <Svg key={i} {...componentAtts}>{childs}</Svg>;
     case 'g':
       componentAtts = this.obtainComponentAtts(node, G_ATTS);

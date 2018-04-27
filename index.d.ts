@@ -39,6 +39,13 @@ interface SvgUriProps {
      * Fill the entire svg element with same color
      */
     fillAll?: boolean
+
+    /**
+     * The viewBox attribute allows you to specify that a given
+     * set of graphics stretch to fit a particular container element
+     * e.g. viewBox={'0 0 24 24'} to fit 24x24 square
+     */
+    viewBox?: string
 }
 
 export default class SvgUri extends Component<SvgUriProps, {}> { }
