@@ -36,6 +36,11 @@ interface SvgUriProps {
     fill?: string
 
     /**
+     * Invoked when load completes successfully.
+     */
+    onLoad?: Function
+  
+    /**
      * Fill the entire svg element with same color
      */
     fillAll?: boolean
