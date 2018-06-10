@@ -226,6 +226,11 @@ class SvgUri extends Component{
 
   obtainComponentAtts({attributes}, enabledAttributes) {
     const styleAtts = {};
+
+    if (this.state.fill && this.props.fillAll) {
+      styleAtts.fill = this.state.fill;
+    }
+
     Array.from(attributes).forEach(({nodeName, nodeValue}) => {
       Object.assign(styleAtts, utils.transformStyle({
         nodeName,
@@ -310,6 +315,7 @@ SvgUri.propTypes = {
   source: PropTypes.any,
   fill: PropTypes.string,
   onLoad: PropTypes.func,
+  fillAll: PropTypes.bool
 }
 
 module.exports = SvgUri;
