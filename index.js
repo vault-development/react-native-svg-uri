@@ -151,7 +151,7 @@ class SvgUri extends Component{
   trimElementChilden(children) {
     for (child of children) {
       if (typeof child === 'string') {
-        if (child.trim.length === 0)
+        if (child.trim().length === 0)
           children.splice(children.indexOf(child), 1);
       }
     }
