@@ -83,7 +83,7 @@ class SvgUri extends Component{
   constructor(props){
     super(props);
 
-    this.state = {fill: props.fill, svgXmlData: props.svgXmlData};
+    this.state = {fill: props.fill, svgXmlData: props.svgXmlData, stroke: props.stroke};
 
     this.createSVGElement     = this.createSVGElement.bind(this);
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
@@ -118,6 +118,9 @@ class SvgUri extends Component{
 
     if (nextProps.fill !== this.props.fill) {
       this.setState({ fill: nextProps.fill });
+    }
+    if (nextProps.stroke !== this.props.stroke) {
+      this.setState({ stroke: nextProps.stroke });
     }
   }
 
@@ -235,7 +238,8 @@ class SvgUri extends Component{
       Object.assign(styleAtts, utils.transformStyle({
         nodeName,
         nodeValue,
-        fillProp: this.state.fill
+        fillProp: this.state.fill,
+        strokeProp: this.state.stroke
       }));
     });
 
@@ -244,7 +248,7 @@ class SvgUri extends Component{
       .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, {nodeName, nodeValue}) => {
-        acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : nodeValue
+        acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : (( this.state.stroke && nodeName === 'stroke' && nodeValue !== 'none' ) ? this.state.stroke : nodeValue )
         return acc
       }, {});
     Object.assign(componentAtts, styleAtts);
@@ -314,6 +318,7 @@ SvgUri.propTypes = {
   svgXmlData: PropTypes.string,
   source: PropTypes.any,
   fill: PropTypes.string,
+  stroke: PropTypes.string,
   onLoad: PropTypes.func,
   fillAll: PropTypes.bool
 }
