@@ -51,7 +51,7 @@ const RECT_ATTS = ['width', 'height'];
 const LINE_ATTS = ['x1', 'y1', 'x2', 'y2'];
 const LINEARG_ATTS = LINE_ATTS.concat(['id', 'gradientUnits']);
 const RADIALG_ATTS = CIRCLE_ATTS.concat(['id', 'gradientUnits']);
-const STOP_ATTS = ['offset'];
+const STOP_ATTS = ['offset', 'stopColor'];
 const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry'];
 
 const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight']
