@@ -76,7 +76,8 @@ const COMMON_ATTS = [
   'scale',
   'origin',
   'originX',
-  'originY'
+  'originY',
+  'transform'
 ];
 
 let ind = 0;
