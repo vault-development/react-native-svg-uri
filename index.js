@@ -47,7 +47,7 @@ const G_ATTS = ['id'];
 
 const CIRCLE_ATTS = ['cx', 'cy', 'r'];
 const PATH_ATTS = ['d'];
-const RECT_ATTS = ['width', 'height'];
+const RECT_ATTS = ['width', 'height', 'rx'];
 const LINE_ATTS = ['x1', 'y1', 'x2', 'y2'];
 const LINEARG_ATTS = LINE_ATTS.concat(['id', 'gradientUnits']);
 const RADIALG_ATTS = CIRCLE_ATTS.concat(['id', 'gradientUnits']);
@@ -84,9 +84,7 @@ let ind = 0;
 
 function fixYPosition(y, node) {
   if (node.attributes) {
-    const fontSizeAttr = Object.keys(node.attributes).find(
-      a => node.attributes[a].name === 'font-size'
-    );
+    const fontSizeAttr = Object.keys(node.attributes).find(a => node.attributes[a].name === 'font-size');
     if (fontSizeAttr) {
       return '' + (parseFloat(y) - parseFloat(node.attributes[fontSizeAttr].value));
     }
@@ -322,9 +320,7 @@ class SvgUri extends Component {
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, { nodeName, nodeValue }) => {
         acc[nodeName] =
-          this.state.fill && nodeName === 'fill' && nodeValue !== 'none'
-            ? this.state.fill
-            : nodeValue;
+          this.state.fill && nodeName === 'fill' && nodeValue !== 'none' ? this.state.fill : nodeValue;
         return acc;
       }, {});
     Object.assign(componentAtts, styleAtts);
