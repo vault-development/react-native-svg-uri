@@ -125,16 +125,22 @@ class SvgUri extends Component{
     this.isComponentMounted = false
   }
 
-  async fetchSVGData(uri){
-    let responseXML = null;
+  async fetchSVGData(uri) {
+    let responseXML = null, error = null;
     try {
       const response = await fetch(uri);
       responseXML = await response.text();
     } catch(e) {
+      error = e;
       console.error("ERROR SVG", e);
     } finally {
       if (this.isComponentMounted) {
-        this.setState({svgXmlData:responseXML});
+        this.setState({ svgXmlData: responseXML }, () => {
+          const { onLoad } = this.props;
+          if (onLoad && !error) {
+            onLoad();
+          }
+        });
       }
     }
 
@@ -144,8 +150,8 @@ class SvgUri extends Component{
   // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
-      if (typeof child === 'string') {
-        if (child.trim().length === 0)
+      if (typeof child === 'string') { 
+        if (child.trim().length === 0) 
           children.splice(children.indexOf(child), 1);
       }
     }
@@ -217,6 +223,11 @@ class SvgUri extends Component{
 
   obtainComponentAtts({attributes}, enabledAttributes) {
     const styleAtts = {};
+
+    if (this.state.fill && this.props.fillAll) {
+      styleAtts.fill = this.state.fill;
+    }
+
     Array.from(attributes).forEach(({nodeName, nodeValue}) => {
       Object.assign(styleAtts, utils.transformStyle({
         nodeName,
@@ -241,7 +252,7 @@ class SvgUri extends Component{
   inspectNode(node){
     // Only process accepted elements
     if (!ACCEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
-      return null;
+      return (<View />);
     }
 
     // Process the xml node
@@ -275,7 +286,7 @@ class SvgUri extends Component{
       const inputSVG = this.state.svgXmlData.substring(
         this.state.svgXmlData.indexOf("<svg "),
         (this.state.svgXmlData.indexOf("</svg>") + 6)
-      );
+      ).replace(/<!-(.*?)->/g, '');
 
       const doc = new xmldom.DOMParser().parseFromString(inputSVG);
 
@@ -300,6 +311,8 @@ SvgUri.propTypes = {
   svgXmlData: PropTypes.string,
   source: PropTypes.any,
   fill: PropTypes.string,
+  onLoad: PropTypes.func,
+  fillAll: PropTypes.bool
 }
 
 module.exports = SvgUri;
