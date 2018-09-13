@@ -10,9 +10,10 @@ export const transformStyle = ({nodeName, nodeValue, fillProp}) => {
       .reduce((acc, attribute) => {
         const [property, value] = attribute.split(':');
         if (property == "")
-            return acc;
+          return acc;
         else
-            return {...acc, [camelCase(property)]: fillProp && property === 'fill' ? fillProp : value};
+          return { ...acc, [camelCase(property)]: fillProp && property === 'fill' ? fillProp : (strokeProp && property === 'stroke' ? strokeProp : value) };
+            // return {...acc, [camelCase(property)]: fillProp && property === 'fill' ? fillProp : value};
       }, {});
   }
   return null;

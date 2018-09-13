@@ -99,7 +99,8 @@ class SvgUri extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { fill: props.fill, svgXmlData: props.svgXmlData };
+    this.state = { fill: props.fill, svgXmlData: props.svgXmlData, stroke: props.stroke };
+    // this.state = { fill: props.fill, svgXmlData: props.svgXmlData };
 
     this.createSVGElement = this.createSVGElement.bind(this);
     this.obtainComponentAtts = this.obtainComponentAtts.bind(this);
@@ -134,6 +135,10 @@ class SvgUri extends Component {
 
     if (nextProps.fill !== this.props.fill) {
       this.setState({ fill: nextProps.fill });
+    }
+
+    if (nextProps.stroke !== this.props.stroke) {
+      this.setState({ stroke: nextProps.stroke });
     }
   }
 
@@ -309,7 +314,8 @@ class SvgUri extends Component {
         utils.transformStyle({
           nodeName,
           nodeValue,
-          fillProp: this.state.fill
+          fillProp: this.state.fill,
+          strokeProp: this.state.stroke
         })
       );
     });
@@ -320,7 +326,13 @@ class SvgUri extends Component {
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, { nodeName, nodeValue }) => {
         acc[nodeName] =
-          this.state.fill && nodeName === 'fill' && nodeValue !== 'none' ? this.state.fill : nodeValue;
+          this.state.fill && nodeName === 'fill' && nodeValue !== 'none'
+            ? this.state.fill
+            : this.state.stroke && nodeName === 'stroke' && nodeValue !== 'none'
+              ? this.state.stroke
+              : nodeValue;
+        // acc[nodeName] =
+        // this.state.fill && nodeName === 'fill' && nodeValue !== 'none' ? this.state.fill : nodeValue;
         return acc;
       }, {});
     Object.assign(componentAtts, styleAtts);
@@ -384,6 +396,7 @@ SvgUri.propTypes = {
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   svgXmlData: PropTypes.string,
   source: PropTypes.any,
+  strokeProp: this.state.stroke,
   fill: PropTypes.string,
   onLoad: PropTypes.func,
   fillAll: PropTypes.bool
