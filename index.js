@@ -207,7 +207,7 @@ class SvgUri extends Component {
       case 'path':
         componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
         return (
-          <Path key={i} {...componentAtts}>
+          <Path key={i} {...componentAtts} fill={this.props.fill}>
             {childs}
           </Path>
         );
