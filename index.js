@@ -255,7 +255,7 @@ class SvgUri extends Component{
   inspectNode(node){
     // Only process accepted elements
     if (!ACCEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
-      return null;
+      return (<View />);
     }
 
     // Process the xml node
@@ -289,7 +289,7 @@ class SvgUri extends Component{
       const inputSVG = this.state.svgXmlData.substring(
         this.state.svgXmlData.indexOf("<svg "),
         (this.state.svgXmlData.indexOf("</svg>") + 6)
-      );
+      ).replace(/<!-(.*?)->/g, '');
 
       const doc = new xmldom.DOMParser().parseFromString(inputSVG);
 
