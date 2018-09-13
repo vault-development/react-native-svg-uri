@@ -54,14 +54,14 @@ const RADIALG_ATTS = CIRCLE_ATTS.concat(['id', 'gradientUnits']);
 const STOP_ATTS = ['offset'];
 const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry'];
 
-const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight']
+const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight', 'textAnchor']
 
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
 
 const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
     'strokeLinecap', 'strokeLinejoin',
-    'strokeDasharray', 'strokeDashoffset', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY'];
+    'strokeDasharray', 'strokeDashoffset', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY', 'transform', 'clipPath'];
 
 let ind = 0;
 
@@ -150,8 +150,8 @@ class SvgUri extends Component{
   // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
-      if (typeof child === 'string') {
-        if (child.trim.length === 0)
+      if (typeof child === 'string') { 
+        if (child.trim().length === 0) 
           children.splice(children.indexOf(child), 1);
       }
     }
@@ -209,9 +209,6 @@ class SvgUri extends Component{
       return <Polyline key={i} {...componentAtts}>{childs}</Polyline>;
     case 'text':
       componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
-      if (componentAtts.y) {
-        componentAtts.y = fixYPosition(componentAtts.y, node)
-      }
       return <Text key={i} {...componentAtts}>{childs}</Text>;
     case 'tspan':
       componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
