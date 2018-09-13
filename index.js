@@ -54,7 +54,7 @@ const RADIALG_ATTS = CIRCLE_ATTS.concat(['id', 'gradientUnits']);
 const STOP_ATTS = ['offset', 'stopColor'];
 const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry'];
 
-const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight'];
+const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight', 'textAnchor'];
 
 const IMAGE_ATTS = ['width', 'height', 'preserveAspectRatio', 'href', 'clipPath'];
 
@@ -79,7 +79,8 @@ const COMMON_ATTS = [
   'origin',
   'originX',
   'originY',
-  'transform'
+  'transform',
+  'clipPath'
 ];
 
 let ind = 0;
@@ -301,9 +302,13 @@ class SvgUri extends Component {
       case 'image':
         componentAtts = this.obtainComponentAtts(node, IMAGE_ATTS);
         if (componentAtts.y) {
-          componentAtts.y = fixYPosition(componentAtts.y, node)
+          componentAtts.y = fixYPosition(componentAtts.y, node);
         }
-        return <Image key={i} {...componentAtts}>{childs}</Image>;
+        return (
+          <Image key={i} {...componentAtts}>
+            {childs}
+          </Image>
+        );
       default:
         return null;
     }
