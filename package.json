@@ -1,6 +1,6 @@
 {
   "name": "react-native-svg-uri-sh",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Render an SVG Image from an URL",
   "main": "index.js",
   "scripts": {
