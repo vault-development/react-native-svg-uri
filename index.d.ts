@@ -4,7 +4,7 @@
 // TypeScript Version: 2.2.2
 
 import React, { Component } from 'react'
-import { ImageURISource } from 'react-native'
+import { ImageURISource, StyleProp } from 'react-native'
 
 interface SvgUriProps {
     /**
@@ -49,6 +49,8 @@ interface SvgUriProps {
      * Fill the entire svg element with same color
      */
     fillAll?: boolean
+
+    style: StyleProp
 }
 
 export default class SvgUri extends Component<SvgUriProps, {}> { }
