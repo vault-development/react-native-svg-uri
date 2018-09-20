@@ -12,7 +12,7 @@ export const transformStyle = ({nodeName, nodeValue, fillProp}) => {
         if (property == "")
             return acc;
         else
-            return {...acc, [camelCase(property)]: fillProp && property === 'fill' ? fillProp : value};
+            return {...acc, [camelCase(property)]: fillProp && property === 'fill' ? fillProp : (strokeProp && property === 'stroke' ? strokeProp : value)};
       }, {});
   }
   return null;
