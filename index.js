@@ -103,21 +103,28 @@ class SvgUri extends Component{
     this.isComponentMounted = true;
   }
 
-  componentWillReceiveProps (nextProps){
-    if (nextProps.source) {
-      const source = resolveAssetSource(nextProps.source) || {};
-      const oldSource = resolveAssetSource(this.props.source) || {};
-      if(source.uri !== oldSource.uri){
-        this.fetchSVGData(source.uri);
-      }
+  static getDerivedStateFromProps(nextProps, state){
+    const newState = {};
+
+    if (nextProps.svgXmlData !== state.svgXmlData) {
+      Object.assign(newState, { svgXmlData: nextProps.svgXmlData });
     }
 
-    if (nextProps.svgXmlData !== this.props.svgXmlData) {
-      this.setState({ svgXmlData: nextProps.svgXmlData });
+    if (nextProps.fill !== state.fill) {
+      Object.assign(newState, { fill: nextProps.fill });
     }
 
-    if (nextProps.fill !== this.props.fill) {
-      this.setState({ fill: nextProps.fill });
+    return Object.keys(newState).length > 0 ? newState : null;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { source } = this.props;
+    if (source) {
+        const newSource = resolveAssetSource(source) || {};
+        const oldSource = prevState.source && resolveAssetSource(prevProps.source) || {};
+        if (newSource.uri !== oldSource.uri){
+          this.fetchSVGData(newSource.uri);
+        }
     }
   }
 
@@ -150,8 +157,8 @@ class SvgUri extends Component{
   // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
-      if (typeof child === 'string') { 
-        if (child.trim().length === 0) 
+      if (typeof child === 'string') {
+        if (child.trim().length === 0)
           children.splice(children.indexOf(child), 1);
       }
     }

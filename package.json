@@ -23,6 +23,7 @@
     "xmldom": "^0.1.22"
   },
   "peerDependencies": {
+    "react": "^16.3.0",
     "react-native-svg": "^5.3.0"
   },
   "bugs": {
