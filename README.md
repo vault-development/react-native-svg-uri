@@ -33,7 +33,38 @@ react-native link react-native-svg # not react-native-svg-uri !!!
 
 - [ANDROID] There is a problem with static SVG file on Android,
   Works OK in debug mode but fails to load the file in release mode.
-  At the moment the only workaround is to pass the svg content in the svgXmlData prop.
+  At the moment the only workaround is to pass the svg content in the svgXmlData prop,
+  or, you can use [babel-plugin-inline-import](https://github.com/credcollective/babel-plugin-inline-import)
+  
+  .babelrc
+  ```json
+  {
+    "presets": ["module:metro-react-native-babel-preset"],
+    "plugins": [
+      ["babel-plugin-inline-import", {
+        "extensions": [
+          ".svg"
+        ]
+      }]
+    ]
+  }
+  ```
+  
+  App.js
+  ```javascript
+  import * as React from 'react';
+  import SvgUri from 'react-native-svg-uri';
+  import testSvg from './test.svg';
+
+  export default () => (
+    <SvgUri
+      width="200"
+      height="200"
+      svgXmlData={testSvg}
+    />
+  );
+  ```
+
 
 ## <a name="Usage">Usage</a>
 
