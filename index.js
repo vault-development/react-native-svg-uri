@@ -18,6 +18,7 @@ import Svg,{
     Text,
     TSpan,
     Defs,
+    Use,
     Stop
 } from 'react-native-svg';
 
@@ -30,6 +31,7 @@ const ACCEPTED_SVG_ELEMENTS = [
   'path',
   'rect',
   'defs',
+  'use',
   'line',
   'linearGradient',
   'radialGradient',
@@ -59,11 +61,24 @@ const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight', 'textAnchor']
 const POLYGON_ATTS = ['points'];
 const POLYLINE_ATTS = ['points'];
 
-const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
+const USE_ATTS = ['href'];
+
+const COMMON_ATTS = ['id', 'fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
     'strokeLinecap', 'strokeLinejoin',
     'strokeDasharray', 'strokeDashoffset', 'x', 'y', 'rotate', 'scale', 'origin', 'originX', 'originY', 'transform', 'clipPath'];
 
 let ind = 0;
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use#Attributes
+function fixXlinkHref (node) {
+  if (node.attributes) {
+    const hrefAttr = Object.keys(node.attributes).find(a => node.attributes[a].name === 'href');
+    const legacyHrefAttr = Object.keys(node.attributes).find(a => node.attributes[a].name === 'xlink:href');
+
+    return node.attributes[hrefAttr || legacyHrefAttr].value;
+  }
+  return null;
+}
 
 function fixYPosition (y, node) {
   if (node.attributes) {
@@ -189,6 +204,10 @@ class SvgUri extends Component{
       return <Line key={i} {...componentAtts}>{childs}</Line>;
     case 'defs':
       return <Defs key={i}>{childs}</Defs>;
+    case 'use':
+      componentAtts = this.obtainComponentAtts(node, USE_ATTS);
+      componentAtts.href = fixXlinkHref(node);
+      return <Use key={i} {...componentAtts}/>;
     case 'linearGradient':
       componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS);
       return <LinearGradient key={i} {...componentAtts}>{childs}</LinearGradient>;
@@ -252,7 +271,7 @@ class SvgUri extends Component{
   inspectNode(node){
     // Only process accepted elements
     if (!ACCEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
-      return (<View />);
+      return (<View key={ind++} />);
     }
 
     // Process the xml node
