@@ -149,12 +149,16 @@ class SvgUri extends Component{
 
   // Remove empty strings from children array
   trimElementChilden(children) {
+    let emptyItems=[]
     for (child of children) {
       if (typeof child === 'string') { 
         if (child.trim().length === 0) 
-          children.splice(children.indexOf(child), 1);
+        emptyItems.push(child)
       }
     }
+    emptyItems.forEach(child=>{
+      children.splice(children.indexOf(child), 1);
+    })
   }
 
   createSVGElement(node, childs){
