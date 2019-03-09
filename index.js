@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View} from 'react-native';
+import {View, AsyncStorage} from 'react-native';
 import PropTypes from 'prop-types'
 import xmldom from 'xmldom';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
@@ -128,8 +128,14 @@ class SvgUri extends Component{
   async fetchSVGData(uri) {
     let responseXML = null, error = null;
     try {
-      const response = await fetch(uri);
-      responseXML = await response.text();
+      const value = await AsyncStorage.getItem(uri);
+      if (value) {
+        responseXML = value;
+      } else {
+        const response = await fetch(uri);
+        responseXML = await response.text();
+        AsyncStorage.setItem(uri, responseXML);
+      }
     } catch(e) {
       error = e;
       console.error("ERROR SVG", e);
