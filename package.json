@@ -1,6 +1,6 @@
 {
   "name": "react-native-fast-svg",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Render an SVG Images from url (using react-native-svg-uri), plus caching",
   "main": "index.js",
   "scripts": {
