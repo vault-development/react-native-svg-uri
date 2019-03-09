@@ -1,20 +1,21 @@
 {
-  "name": "react-native-svg-uri",
-  "version": "1.2.3",
-  "description": "Render an SVG Image from an URL",
+  "name": "react-native-fast-svg",
+  "version": "1.0.0",
+  "description": "Render an SVG Images from url (using react-native-svg-uri), plus caching",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/matiascba/react-native-svg-uri.git"
+    "url": "git+https://github.com/izzisolomon/react-native-svg-uri.git"
   },
   "keywords": [
     "react-native",
     "svg",
     "url",
     "uri",
+    "cache",
     "http"
   ],
   "author": "Matias Cortes",
@@ -26,9 +27,9 @@
     "react-native-svg": "^5.3.0"
   },
   "bugs": {
-    "url": "https://github.com/matiascba/react-native-svg-uri/issues"
+    "url": "https://github.com/izzisolomon/react-native-svg-uri/issues"
   },
-  "homepage": "https://github.com/matiascba/react-native-svg-uri#readme",
+  "homepage": "https://github.com/izzisolomon/react-native-svg-uri#readme",
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-preset-react-native": "^2.1.0",

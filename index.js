@@ -134,7 +134,7 @@ class SvgUri extends Component{
       } else {
         const response = await fetch(uri);
         responseXML = await response.text();
-        AsyncStorage.setItem(uri, responseXML);
+        if (!this.props.noCache) AsyncStorage.setItem(uri, responseXML);
       }
     } catch(e) {
       error = e;
@@ -156,8 +156,8 @@ class SvgUri extends Component{
   // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
-      if (typeof child === 'string') { 
-        if (child.trim().length === 0) 
+      if (typeof child === 'string') {
+        if (child.trim().length === 0)
           children.splice(children.indexOf(child), 1);
       }
     }

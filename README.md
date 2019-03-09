@@ -1,23 +1,21 @@
 # react-native-svg-uri
-Render SVG images in React Native from an URL or a static file
+Render SVG images in React Native from using a URL or a static file
 
-This was tested with RN 0.33 and react-native-svg 4.3.1 (depends on this library)
-[react-native-svg](https://github.com/react-native-community/react-native-svg)
+URL SVG's are cached using react native's Async Storage.
 
+Forked from 'react-native-svg-uri'.
 
-Not all the svgs can be rendered, if you find problems fill an issue or a PR in
-order to contemplate all the cases
 
 Install library from `npm`
 
 ```bash
-npm install react-native-svg-uri --save
+npm install react-native-fast-svg --save
 ```
 
 Link library react-native-svg
 
 ```bash
-react-native link react-native-svg # not react-native-svg-uri !!!
+react-native link react-native-svg # not react-native-fast-svg !!!
 ```
 
 ## Props
@@ -28,6 +26,7 @@ react-native link react-native-svg # not react-native-svg-uri !!!
 | `svgXmlData` | `String` |  | You can pass the SVG as String directly
 | `fill` | `Color` |  | Overrides all fill attributes of the svg file
 | `fillAll` | `Boolean` |  Adds the fill color to the entire svg object
+|`noCache`|`Booleean`| will not cache this particular SVG if true. default is false
 
 ## Known Bugs
 
