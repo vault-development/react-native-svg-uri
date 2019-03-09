@@ -1,7 +1,7 @@
 # react-native-svg-uri
-Render SVG images in React Native from using a URL or a static file
+Render SVG images in React Native using a URL or a static file.
 
-URL SVG's are cached using react native's Async Storage.
+SVG's rendered from a url are cached using react native's Async Storage.
 
 Forked from 'react-native-svg-uri'.
 
@@ -25,8 +25,8 @@ react-native link react-native-svg # not react-native-fast-svg !!!
 | `source` | `ImageSource` |  | Same kind of `source` prop that `<Image />` component has
 | `svgXmlData` | `String` |  | You can pass the SVG as String directly
 | `fill` | `Color` |  | Overrides all fill attributes of the svg file
-| `fillAll` | `Boolean` |  Adds the fill color to the entire svg object
-|`noCache`|`Booleean`| will not cache this particular SVG if true. default is false
+| `fillAll` | `Boolean` | false | Adds the fill color to the entire svg object
+|`noCache`|`Booleean`| false | will not cache this particular SVG if true
 
 ## Known Bugs
 
