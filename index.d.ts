@@ -4,7 +4,7 @@
 // TypeScript Version: 2.2.2
 
 import React, { Component } from 'react'
-import { ImageURISource } from 'react-native'
+import { ImageURISource, ViewStyle } from 'react-native'
 
 interface SvgUriProps {
     /**
@@ -21,7 +21,7 @@ interface SvgUriProps {
      * Source path for the .svg file
      * Expects a require('path') to the file or object with uri.
      * e.g. source={require('my-path')}
-     * e.g. source={{ur: 'my-path'}}
+     * e.g. source={{uri: 'my-path'}}
      */
     source?: ImageURISource
 
@@ -39,11 +39,16 @@ interface SvgUriProps {
      * Invoked when load completes successfully.
      */
     onLoad?: Function
-  
+
     /**
      * Fill the entire svg element with same color
      */
     fillAll?: boolean
+
+    /**
+     * Style for the View that wraps the SVG
+     */
+    style?: ViewStyle
 }
 
 export default class SvgUri extends Component<SvgUriProps, {}> { }
