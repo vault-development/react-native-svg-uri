@@ -3,52 +3,52 @@
 // Definitions by: Kyle Roach <https://github.com/iRoachie>
 // TypeScript Version: 2.2.2
 
-import React, { Component } from "react";
-import { ImageURISource, ViewStyle } from "react-native";
+import React, { Component } from 'react';
+import { ImageURISource, ViewStyle } from 'react-native';
 
 interface SvgUriProps {
-  /**
-   * The width of the rendered svg
-   */
-  width?: number | string;
+    /**
+     * The width of the rendered svg
+     */
+    width?: number | string;
 
-  /**
-   * The height of the rendered svg
-   */
-  height?: number | string;
+    /**
+     * The height of the rendered svg
+     */
+    height?: number | string;
 
-  /**
-   * Source path for the .svg file
-   * Expects a require('path') to the file or object with uri.
-   * e.g. source={require('my-path')}
-   * e.g. source={{uri: 'my-path'}}
-   */
-  source?: ImageURISource;
+    /**
+     * Source path for the .svg file
+     * Expects a require('path') to the file or object with uri.
+     * e.g. source={require('my-path')}
+     * e.g. source={{uri: 'my-path'}}
+     */
+    source?: ImageURISource;
 
-  /**
-   * Direct svg code to render. Similar to inline svg
-   */
-  svgXmlData?: string;
+    /**
+     * Direct svg code to render. Similar to inline svg
+     */
+    svgXmlData?: string;
 
-  /**
-   * Fill color for the svg object
-   */
-  fill?: string;
+    /**
+     * Fill color for the svg object
+     */
+    fill?: string;
 
-  /**
-   * Invoked when load completes successfully.
-   */
-  onLoad?: Function;
+    /**
+     * Invoked when load completes successfully.
+     */
+    onLoad?: Function;
 
-  /**
-   * Fill the entire svg element with same color
-   */
-  fillAll?: boolean;
+    /**
+     * Fill the entire svg element with same color
+     */
+    fillAll?: boolean;
 
-  /**
-   * Style for the View that wraps the SVG
-   */
-  style?: ViewStyle;
+    /**
+     * Style for the View that wraps the SVG
+     */
+    style?: ViewStyle;
 }
 
 export default class SvgUri extends Component<SvgUriProps, {}> {}
