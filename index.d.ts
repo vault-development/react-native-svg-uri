@@ -3,19 +3,19 @@
 // Definitions by: Kyle Roach <https://github.com/iRoachie>
 // TypeScript Version: 2.2.2
 
-import React, { Component } from 'react';
-import { ImageURISource, ViewStyle } from 'react-native';
+import React, { Component } from 'react'
+import { ImageURISource, ViewStyle } from 'react-native'
 
 interface SvgUriProps {
     /**
      * The width of the rendered svg
      */
-    width?: number | string;
+    width?: number | string
 
     /**
      * The height of the rendered svg
      */
-    height?: number | string;
+    height?: number | string
 
     /**
      * Source path for the .svg file
@@ -23,32 +23,32 @@ interface SvgUriProps {
      * e.g. source={require('my-path')}
      * e.g. source={{uri: 'my-path'}}
      */
-    source?: ImageURISource;
+    source?: ImageURISource
 
     /**
      * Direct svg code to render. Similar to inline svg
      */
-    svgXmlData?: string;
+    svgXmlData?: string
 
     /**
      * Fill color for the svg object
      */
-    fill?: string;
+    fill?: string
 
     /**
      * Invoked when load completes successfully.
      */
-    onLoad?: Function;
+    onLoad?: Function
 
     /**
      * Fill the entire svg element with same color
      */
-    fillAll?: boolean;
+    fillAll?: boolean
 
     /**
      * Style for the View that wraps the SVG
      */
-    style?: ViewStyle;
+    style?: ViewStyle
 }
 
-export default class SvgUri extends Component<SvgUriProps, {}> {}
+export default class SvgUri extends Component<SvgUriProps, {}> { }
