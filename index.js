@@ -177,6 +177,9 @@ class SvgUri extends Component{
       return <G key={i} {...componentAtts}>{childs}</G>;
     case 'path':
       componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
+      if(this.props.fill) {
+        componentAtts.fill = this.props.fill
+      }
       return <Path key={i} {...componentAtts}>{childs}</Path>;
     case 'circle':
       componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
