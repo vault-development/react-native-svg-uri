@@ -3,8 +3,8 @@
 // Definitions by: Kyle Roach <https://github.com/iRoachie>
 // TypeScript Version: 2.2.2
 
-import React, { Component } from 'react'
-import { ImageURISource } from 'react-native'
+import { Component } from 'react';
+import { ImageURISource } from 'react-native';
 
 interface SvgUriProps {
     /**
@@ -44,6 +44,12 @@ interface SvgUriProps {
      * Fill the entire svg element with same color
      */
     fillAll?: boolean
+
+    /**
+     * Called when a touchable polygon is pressed
+     * @param string: the value of the `touchable` property of the `<polygon>` tag
+     */
+    onPolygonPress?: (string) => void
 }
 
 export default class SvgUri extends Component<SvgUriProps, {}> { }
