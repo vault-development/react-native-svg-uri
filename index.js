@@ -334,4 +334,4 @@ SvgUri.propTypes = {
   onPolygonPress: PropTypes.func,
 };
 
-module.exports = { default: SvgUri, SvgUri };
+module.exports = SvgUri;
