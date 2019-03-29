@@ -3,6 +3,7 @@
   "version": "1.2.3",
   "description": "Render an SVG Image from an URL",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register"
   },
