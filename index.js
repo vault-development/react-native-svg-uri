@@ -5,20 +5,20 @@ import xmldom from 'xmldom';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import Svg,{
-    Circle,
-    Ellipse,
-    G ,
-    LinearGradient,
-    RadialGradient,
-    Line,
-    Path,
-    Polygon,
-    Polyline,
-    Rect,
-    Text,
-    TSpan,
-    Defs,
-    Stop
+  Circle,
+  Ellipse,
+  G ,
+  LinearGradient,
+  RadialGradient,
+  Line,
+  Path,
+  Polygon,
+  Polyline,
+  Rect,
+  Text,
+  TSpan,
+  Defs,
+  Stop
 } from 'react-native-svg';
 
 import * as utils from './utils';
@@ -56,7 +56,7 @@ const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry'];
 
 const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight', 'textAnchor']
 
-const POLYGON_ATTS = ['points'];
+const POLYGON_ATTS = ['points', 'touchable'];
 const POLYLINE_ATTS = ['points'];
 
 const COMMON_ATTS = ['fill', 'fillOpacity', 'stroke', 'strokeWidth', 'strokeOpacity', 'opacity',
@@ -78,7 +78,7 @@ function fixYPosition (y, node) {
   return fixYPosition(y, node.parentNode)
 }
 
-class SvgUri extends Component{
+class SvgUri extends Component {
 
   constructor(props){
     super(props);
@@ -150,84 +150,104 @@ class SvgUri extends Component{
   // Remove empty strings from children array
   trimElementChilden(children) {
     for (child of children) {
-      if (typeof child === 'string') { 
-        if (child.trim().length === 0) 
+      if (typeof child === 'string') {
+        if (child.trim().length === 0) {
           children.splice(children.indexOf(child), 1);
+        }
       }
     }
   }
 
-  createSVGElement(node, childs){
-    this.trimElementChilden(childs);
+  createSVGElement(node, children){
+    this.trimElementChilden(children);
     let componentAtts = {};
     const i = ind++;
     switch (node.nodeName) {
-    case 'svg':
-      componentAtts = this.obtainComponentAtts(node, SVG_ATTS);
-      if (this.props.width) {
-        componentAtts.width = this.props.width;
-      }
-      if (this.props.height) {
-        componentAtts.height = this.props.height;
-      }
+      case 'svg':
+        componentAtts = this.obtainComponentAtts(node, SVG_ATTS);
+        if (this.props.width) {
+          componentAtts.width = this.props.width;
+        }
+        if (this.props.height) {
+          componentAtts.height = this.props.height;
+        }
 
-      return <Svg key={i} {...componentAtts}>{childs}</Svg>;
-    case 'g':
-      componentAtts = this.obtainComponentAtts(node, G_ATTS);
-      return <G key={i} {...componentAtts}>{childs}</G>;
-    case 'path':
-      componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
-      return <Path key={i} {...componentAtts}>{childs}</Path>;
-    case 'circle':
-      componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
-      return <Circle key={i} {...componentAtts}>{childs}</Circle>;
-    case 'rect':
-      componentAtts = this.obtainComponentAtts(node, RECT_ATTS);
-      return <Rect key={i} {...componentAtts}>{childs}</Rect>;
-    case 'line':
-      componentAtts = this.obtainComponentAtts(node, LINE_ATTS);
-      return <Line key={i} {...componentAtts}>{childs}</Line>;
-    case 'defs':
-      return <Defs key={i}>{childs}</Defs>;
-    case 'linearGradient':
-      componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS);
-      return <LinearGradient key={i} {...componentAtts}>{childs}</LinearGradient>;
-    case 'radialGradient':
-      componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS);
-      return <RadialGradient key={i} {...componentAtts}>{childs}</RadialGradient>;
-    case 'stop':
-      componentAtts = this.obtainComponentAtts(node, STOP_ATTS);
-      return <Stop key={i} {...componentAtts}>{childs}</Stop>;
-    case 'ellipse':
-      componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS);
-      return <Ellipse key={i} {...componentAtts}>{childs}</Ellipse>;
-    case 'polygon':
-      componentAtts = this.obtainComponentAtts(node, POLYGON_ATTS);
-      return <Polygon key={i} {...componentAtts}>{childs}</Polygon>;
-    case 'polyline':
-      componentAtts = this.obtainComponentAtts(node, POLYLINE_ATTS);
-      return <Polyline key={i} {...componentAtts}>{childs}</Polyline>;
-    case 'text':
-      componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
-      return <Text key={i} {...componentAtts}>{childs}</Text>;
-    case 'tspan':
-      componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
-      if (componentAtts.y) {
-        componentAtts.y = fixYPosition(componentAtts.y, node)
-      }
-      return <TSpan key={i} {...componentAtts}>{childs}</TSpan>;
-    default:
-      return null;
+        return <Svg key={i} {...componentAtts}>{children}</Svg>;
+      case 'g':
+        componentAtts = this.obtainComponentAtts(node, G_ATTS);
+        return <G key={i} {...componentAtts}>{children}</G>;
+      case 'path':
+        componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
+        return <Path key={i} {...componentAtts}>{children}</Path>;
+      case 'circle':
+        componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
+        return <Circle key={i} {...componentAtts}>{children}</Circle>;
+      case 'rect':
+        componentAtts = this.obtainComponentAtts(node, RECT_ATTS);
+        return <Rect key={i} {...componentAtts}>{children}</Rect>;
+      case 'line':
+        componentAtts = this.obtainComponentAtts(node, LINE_ATTS);
+        return <Line key={i} {...componentAtts}>{children}</Line>;
+      case 'defs':
+        return <Defs key={i}>{children}</Defs>;
+      case 'linearGradient':
+        componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS);
+        return <LinearGradient key={i} {...componentAtts}>{children}</LinearGradient>;
+      case 'radialGradient':
+        componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS);
+        return <RadialGradient key={i} {...componentAtts}>{children}</RadialGradient>;
+      case 'stop':
+        componentAtts = this.obtainComponentAtts(node, STOP_ATTS);
+        return <Stop key={i} {...componentAtts}>{children}</Stop>;
+      case 'ellipse':
+        componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS);
+        return <Ellipse key={i} {...componentAtts}>{children}</Ellipse>;
+      case 'polygon':
+        componentAtts = this.obtainComponentAtts(node, POLYGON_ATTS);
+        if (componentAtts.touchable) {
+          let polygonRef = null;
+          const handlePressIn = () => { polygonRef && polygonRef.setNativeProps({ opacity: 0.6 }); };
+          const handlePressOut = () => { polygonRef && polygonRef.setNativeProps({ opacity: 1 }); };
+          const handlePress = () => { this.props.onPolygonPress && this.props.onPolygonPress(componentAtts.touchable); };
+          return (
+            <Polygon
+              key={i}
+              ref={ref => { polygonRef = ref; }}
+              {...componentAtts}
+              onPressIn={handlePressIn}
+              onPressOut={handlePressOut}
+              onPress={handlePress}
+            >
+              {children}
+            </Polygon>
+          );
+        }
+        return <Polygon key={i} {...componentAtts}>{children}</Polygon>;
+      case 'polyline':
+        componentAtts = this.obtainComponentAtts(node, POLYLINE_ATTS);
+        return <Polyline key={i} {...componentAtts}>{children}</Polyline>;
+      case 'text':
+        componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
+        if (componentAtts.y) {
+          componentAtts.y = fixYPosition(componentAtts.y, node)
+        }
+        return <Text key={i} {...componentAtts}>{children}</Text>;
+      case 'tspan':
+        componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
+        if (componentAtts.y) {
+          componentAtts.y = fixYPosition(componentAtts.y, node)
+        }
+        return <TSpan key={i} {...componentAtts}>{children}</TSpan>;
+      default:
+        return null;
     }
   }
 
   obtainComponentAtts({attributes}, enabledAttributes) {
     const styleAtts = {};
-
     if (this.state.fill && this.props.fillAll) {
       styleAtts.fill = this.state.fill;
     }
-
     Array.from(attributes).forEach(({nodeName, nodeValue}) => {
       Object.assign(styleAtts, utils.transformStyle({
         nodeName,
@@ -236,7 +256,7 @@ class SvgUri extends Component{
       }));
     });
 
-     const componentAtts =  Array.from(attributes)
+    const componentAtts = Array.from(attributes)
       .map(utils.camelCaseNodeName)
       .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
@@ -252,7 +272,7 @@ class SvgUri extends Component{
   inspectNode(node){
     // Only process accepted elements
     if (!ACCEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
-      return (<View />);
+      return <View />;
     }
 
     // Process the xml node
@@ -261,17 +281,17 @@ class SvgUri extends Component{
     // if have children process them.
     // Recursive function.
     if (node.childNodes && node.childNodes.length > 0){
-        for (let i = 0; i < node.childNodes.length; i++){
-          const isTextValue = node.childNodes[i].nodeValue
-          if (isTextValue) {
-            arrayElements.push(node.childNodes[i].nodeValue)
-          } else {
-            const nodo = this.inspectNode(node.childNodes[i]);
-            if (nodo != null) {
-              arrayElements.push(nodo);
-            }
+      for (let i = 0; i < node.childNodes.length; i++){
+        const isTextValue = node.childNodes[i].nodeValue;
+        if (isTextValue) {
+          arrayElements.push(node.childNodes[i].nodeValue)
+        } else {
+          const inspectedNode = this.inspectNode(node.childNodes[i]);
+          if (inspectedNode != null) {
+            arrayElements.push(inspectedNode);
           }
         }
+      }
     }
 
     return this.createSVGElement(node, arrayElements);
@@ -289,15 +309,13 @@ class SvgUri extends Component{
       ).replace(/<!-(.*?)->/g, '');
 
       const doc = new xmldom.DOMParser().parseFromString(inputSVG);
-
       const rootSVG = this.inspectNode(doc.childNodes[0]);
-
-      return(
-          <View style={this.props.style}>
-            {rootSVG}
-          </View>
+      return (
+        <View style={this.props.style}>
+          {rootSVG}
+        </View>
       );
-    } catch(e){
+    } catch(e) {
       console.error("ERROR SVG", e);
       return null;
     }
@@ -312,7 +330,8 @@ SvgUri.propTypes = {
   source: PropTypes.any,
   fill: PropTypes.string,
   onLoad: PropTypes.func,
-  fillAll: PropTypes.bool
-}
+  fillAll: PropTypes.bool,
+  onPolygonPress: PropTypes.func,
+};
 
-module.exports = SvgUri;
+module.exports = { default: SvgUri, SvgUri };
