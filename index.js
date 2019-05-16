@@ -227,6 +227,29 @@ class SvgUri extends Component{
       return null;
     }
   }
+    
+  const getTrasnformValueByString = (value) => {
+    const regex = /([^ ]*)\(([^()]*(?=\)))/g; // transform(1, 2) => transform(1, 2
+
+    return value.match(regex).reduce((obj, match) => {
+      const [transformName, transformValue] = match.split('(');
+
+
+      let modifiedTransformValue = transformValue;
+
+      if (transformName === 'translate') {
+        modifiedTransformValue = transformValue.split(' ').join(', ');
+      }
+
+      return Object.assign(
+        {},
+        obj,
+        {
+          [transformName]: modifiedTransformValue,
+        },
+      );
+    }, {});
+  };
 
   obtainComponentAtts({attributes}, enabledAttributes) {
     const styleAtts = {};
@@ -248,8 +271,16 @@ class SvgUri extends Component{
       .map(utils.removePixelsFromNodeValue)
       .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
       .reduce((acc, {nodeName, nodeValue}) => {
-        acc[nodeName] = (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') ? this.state.fill : nodeValue
-        return acc
+        let value;
+        if (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') {
+          value = this.state.fill;
+        } else if (nodeName === 'transform') {
+          value = getTrasnformValueByString(nodeValue);
+        } else {
+          value = nodeValue;
+        }
+        acc[nodeName] = value;
+        return acc; 
       }, {});
     Object.assign(componentAtts, styleAtts);
 
