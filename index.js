@@ -228,7 +228,7 @@ class SvgUri extends Component{
     }
   }
     
-  const getTrasnformValueByString = (value) => {
+  getTrasnformValueByString(value) {
     const regex = /([^ ]*)\(([^()]*(?=\)))/g; // transform(1, 2) => transform(1, 2
 
     return value.match(regex).reduce((obj, match) => {
@@ -275,7 +275,7 @@ class SvgUri extends Component{
         if (this.state.fill && nodeName === 'fill' && nodeValue !== 'none') {
           value = this.state.fill;
         } else if (nodeName === 'transform') {
-          value = getTrasnformValueByString(nodeValue);
+          value = this.getTrasnformValueByString(nodeValue);
         } else {
           value = nodeValue;
         }
