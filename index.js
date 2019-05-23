@@ -157,7 +157,7 @@ class SvgUri extends Component{
     }
   }
 
-  createSVGElement(node, childs){
+  createSVGElement(node, childs, props){
     this.trimElementChilden(childs);
     let componentAtts = {};
     const i = ind++;
@@ -180,10 +180,10 @@ class SvgUri extends Component{
       return <Path key={i} {...componentAtts}>{childs}</Path>;
     case 'circle':
       componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
-      return <Circle key={i} {...componentAtts}>{childs}</Circle>;
+      return <Circle key={i} {...componentAtts} fill={props.fill}>{childs}</Circle>;
     case 'rect':
       componentAtts = this.obtainComponentAtts(node, RECT_ATTS);
-      return <Rect key={i} {...componentAtts}>{childs}</Rect>;
+      return <Rect key={i} {...componentAtts} fill={props.fill}>{childs}</Rect>;
     case 'line':
       componentAtts = this.obtainComponentAtts(node, LINE_ATTS);
       return <Line key={i} {...componentAtts}>{childs}</Line>;
@@ -200,13 +200,13 @@ class SvgUri extends Component{
       return <Stop key={i} {...componentAtts}>{childs}</Stop>;
     case 'ellipse':
       componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS);
-      return <Ellipse key={i} {...componentAtts}>{childs}</Ellipse>;
+      return <Ellipse key={i} {...componentAtts} fill={props.fill}>{childs}</Ellipse>;
     case 'polygon':
       componentAtts = this.obtainComponentAtts(node, POLYGON_ATTS);
-      return <Polygon key={i} {...componentAtts}>{childs}</Polygon>;
+      return <Polygon key={i} {...componentAtts} fill={props.fill}>{childs}</Polygon>;
     case 'polyline':
       componentAtts = this.obtainComponentAtts(node, POLYLINE_ATTS);
-      return <Polyline key={i} {...componentAtts}>{childs}</Polyline>;
+      return <Polyline key={i} {...componentAtts} fill={props.fill}>{childs}</Polyline>;
     case 'text':
       componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
       return <Text key={i} {...componentAtts}>{childs}</Text>;
@@ -274,7 +274,7 @@ class SvgUri extends Component{
         }
     }
 
-    return this.createSVGElement(node, arrayElements);
+    return this.createSVGElement(node, arrayElements, this.props);
   }
 
   render () {
