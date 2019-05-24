@@ -83,7 +83,7 @@ class SvgUri extends Component{
   constructor(props){
     super(props);
 
-    this.state = {fill: props.fill, svgXmlData: props.svgXmlData};
+    this.state = {fill: props.fill, svgXmlData: props.svgXmlData, stroke: props.stroke};
 
     this.createSVGElement     = this.createSVGElement.bind(this);
     this.obtainComponentAtts  = this.obtainComponentAtts.bind(this);
@@ -118,6 +118,10 @@ class SvgUri extends Component{
 
     if (nextProps.fill !== this.props.fill) {
       this.setState({ fill: nextProps.fill });
+    }
+
+    if (nextProps.stroke !== this.props.stroke) {
+      this.setState({ stroke: nextProps.stroke });
     }
   }
 
@@ -177,16 +181,16 @@ class SvgUri extends Component{
       return <G key={i} {...componentAtts}>{childs}</G>;
     case 'path':
       componentAtts = this.obtainComponentAtts(node, PATH_ATTS);
-      return <Path key={i} {...componentAtts}>{childs}</Path>;
+      return <Path key={i} {...componentAtts} stroke={props.stroke}>{childs}</Path>;
     case 'circle':
       componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS);
-      return <Circle key={i} {...componentAtts} fill={props.fill}>{childs}</Circle>;
+      return <Circle key={i} {...componentAtts} fill={props.fill} stroke={props.stroke}>{childs}</Circle>;
     case 'rect':
       componentAtts = this.obtainComponentAtts(node, RECT_ATTS);
-      return <Rect key={i} {...componentAtts} fill={props.fill}>{childs}</Rect>;
+      return <Rect key={i} {...componentAtts} fill={props.fill} stroke={props.stroke}>{childs}</Rect>;
     case 'line':
       componentAtts = this.obtainComponentAtts(node, LINE_ATTS);
-      return <Line key={i} {...componentAtts}>{childs}</Line>;
+      return <Line key={i} {...componentAtts} stroke={props.stroke}>{childs}</Line>;
     case 'defs':
       return <Defs key={i}>{childs}</Defs>;
     case 'linearGradient':
@@ -200,13 +204,13 @@ class SvgUri extends Component{
       return <Stop key={i} {...componentAtts}>{childs}</Stop>;
     case 'ellipse':
       componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS);
-      return <Ellipse key={i} {...componentAtts} fill={props.fill}>{childs}</Ellipse>;
+      return <Ellipse key={i} {...componentAtts} fill={props.fill} stroke={props.stroke}>{childs}</Ellipse>;
     case 'polygon':
       componentAtts = this.obtainComponentAtts(node, POLYGON_ATTS);
-      return <Polygon key={i} {...componentAtts} fill={props.fill}>{childs}</Polygon>;
+      return <Polygon key={i} {...componentAtts} fill={props.fill} stroke={props.stroke}>{childs}</Polygon>;
     case 'polyline':
       componentAtts = this.obtainComponentAtts(node, POLYLINE_ATTS);
-      return <Polyline key={i} {...componentAtts} fill={props.fill}>{childs}</Polyline>;
+      return <Polyline key={i} {...componentAtts} fill={props.fill} stroke={props.stroke}>{childs}</Polyline>;
     case 'text':
       componentAtts = this.obtainComponentAtts(node, TEXT_ATTS);
       return <Text key={i} {...componentAtts}>{childs}</Text>;
@@ -311,6 +315,7 @@ SvgUri.propTypes = {
   svgXmlData: PropTypes.string,
   source: PropTypes.any,
   fill: PropTypes.string,
+  stroke: PropTypes.string,
   onLoad: PropTypes.func,
   fillAll: PropTypes.bool
 }
