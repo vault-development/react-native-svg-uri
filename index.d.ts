@@ -36,10 +36,15 @@ interface SvgUriProps {
     fill?: string
 
     /**
+     * Stroke color for the svg object
+     */
+    stroke?: string
+
+    /**
      * Invoked when load completes successfully.
      */
     onLoad?: Function
-  
+
     /**
      * Fill the entire svg element with same color
      */
