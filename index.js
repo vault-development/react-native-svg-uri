@@ -152,12 +152,16 @@ class SvgUri extends Component{
 
   // Remove empty strings from children array
   trimElementChilden(children) {
+    let emptyItems=[]
     for (child of children) {
       if (typeof child === 'string') {
         if (child.trim().length === 0)
-          children.splice(children.indexOf(child), 1);
+          emptyItems.push(child)
       }
     }
+    emptyItems.forEach(child=>{
+      children.splice(children.indexOf(child), 1);
+    })
   }
 
   createSVGElement(node, childs){
@@ -259,7 +263,7 @@ class SvgUri extends Component{
   inspectNode(node){
     // Only process accepted elements
     if (!ACCEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
-      return (<View />);
+      return null;
     }
 
     // Process the xml node
