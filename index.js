@@ -194,7 +194,7 @@ const SvgUri = (props) => {
         if (isTextValue) {
           arrayElements.push(node.childNodes[i].nodeValue)
         } else {
-          const nodo = this.inspectNode(node.childNodes[i]);
+          const nodo = inspectNode(node.childNodes[i]);
           if (nodo != null) {
             arrayElements.push(nodo);
           }
