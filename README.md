@@ -1,4 +1,3 @@
-[Fork updating dependencies]
 # react-native-svg-uri
 Render SVG images in React Native from an URL or a static file
 
