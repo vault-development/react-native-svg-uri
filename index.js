@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {View} from 'react-native';
 import PropTypes from 'prop-types'
-import { DomParser } from '@xmldom/xmldom';
+import xmldom from '@xmldom/xmldom';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import Svg,{
@@ -288,7 +288,7 @@ class SvgUri extends Component{
         (this.state.svgXmlData.indexOf("</svg>") + 6)
       ).replace(/<!-(.*?)->/g, '');
 
-      const doc = new DOMParser().parseFromString(inputSVG);
+      const doc = new xmldom.DOMParser().parseFromString(inputSVG);
 
       const rootSVG = this.inspectNode(doc.childNodes[0]);
 
