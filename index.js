@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {View} from 'react-native';
 import PropTypes from 'prop-types'
-import xmldom from 'xmldom';
+import xmldom from '@xmldom/xmldom';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 import Svg,{
